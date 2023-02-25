@@ -1,0 +1,39 @@
+name: StelyMarketArea
+author: Army_
+version: "${project.version}"
+main: fr.army.stelymarket.StelyMarketPlugin
+api-version: "1.16"
+depend:
+  - "Vault"
+  - "WorldEdit"
+  - "WorldGuard"
+commands:
+  stelymarket:
+    description: "Préfixe de la commande"
+    usage: "/stelymarket <command> [args]"
+    aliases: ["sm"]
+    create:
+      description: "Créer une zone de vente"
+      usage: "/stelymarket create [price]"
+      permissions:
+        default: "op"
+    delete:
+      description: "Supprime une zone de vente"
+      usage: "/stelymarket delete <zone_id>"
+      permissions:
+        default: "op"
+    regen:
+      description: "Regénère une zone de vente"
+      usage: "/stelymarket regen <zone_id>"
+      permissions:
+        default: "op"
+    editprice:
+      description: "Change le prix d'une zone de vente"
+      usage: "/stelymarket editprice <zone_id> <price>"
+      permissions:
+        default: "op"
+    editarea:
+      description: "Change la zone d'une zone de vente"
+      usage: "/stelymarket editarea <zone_id>"
+      permissions:
+        default: "op"

@@ -1,0 +1,19 @@
+# Connection à la base de donnée
+
+database_type: "sqlite" # mysql ou sqlite
+sql:
+  host: "localhost"
+  database: "database_name"
+  user: "username"
+  password: "password"
+  port: 3306
+
+sqlite:
+  file: "StelyMarket.db"
+
+
+# Préfixe des regions lors de leurs création
+region_prefix: "market_" # automatiquement suivi par un chiffre 
+
+# Prix par défaut d'un market
+default_price: 5000

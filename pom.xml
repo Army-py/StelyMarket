@@ -3,10 +3,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>fr.army</groupId>
-    <artifactId>stelymarketarea</artifactId>
+    <artifactId>stelymarket</artifactId>
     <version>1.0.0-SNAPSHOT</version>
 
-    <name>StelyMarketArea</name>
+    <name>StelyMarket</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -44,6 +44,20 @@
 			<version>1.5.21</version>
 			<scope>provided</scope>
 		</dependency>
+
+        <dependency>
+            <groupId>com.sk89q.worldedit</groupId>
+            <artifactId>worldedit-bukkit</artifactId>
+            <version>7.3.0-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sk89q.worldguard</groupId>
+            <artifactId>worldguard-bukkit</artifactId>
+            <version>7.0.5-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
     </dependencies>
 
     <repositories>

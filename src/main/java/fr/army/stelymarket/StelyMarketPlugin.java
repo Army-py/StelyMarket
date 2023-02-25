@@ -1,4 +1,4 @@
-package fr.army.stelymarketarea;
+package fr.army.stelymarket;
 
 import java.io.File;
 import java.io.IOException;
@@ -9,14 +9,17 @@ import java.util.Objects;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import fr.army.stelymarketarea.utils.manager.SQLiteManager;
+import fr.army.stelymarket.commands.CommandManager;
+import fr.army.stelymarket.utils.manager.database.DatabaseManager;
 
-public class StelyMarketAreaPlugin extends JavaPlugin {
+public class StelyMarketPlugin extends JavaPlugin {
     
-    private static StelyMarketAreaPlugin plugin;
+    private static StelyMarketPlugin plugin;
     private YamlConfiguration config;
     private YamlConfiguration messages;
-    private SQLiteManager sqliteManager;
+    private DatabaseManager databaseManager;
+    private CommandManager commandManager;
+
 
     @Override
     public void onEnable() {
@@ -26,26 +29,28 @@ public class StelyMarketAreaPlugin extends JavaPlugin {
         this.config = initFile(this.getDataFolder(), "config.yml");
         this.messages = initFile(this.getDataFolder(), "messages.yml");
 
-        this.sqliteManager = new SQLiteManager(this);
-
         try {
-            this.sqliteManager.connect();
+            this.databaseManager = DatabaseManager.connect(this);
+            this.databaseManager.createTables();
             this.getLogger().info("SQL connectée au plugin !");
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
             getServer().getPluginManager().disablePlugin(this);
         }
-        
-        getLogger().info("StelyMarketAreaPlugin enabled");
+
+        this.commandManager = new CommandManager(this);
+
+        getLogger().info("StelyMarketPlugin enabled");
     }
-    
+
+
     @Override
     public void onDisable() {
-        getLogger().info("StelyMarketAreaPlugin disabled");
+        getLogger().info("StelyMarketPlugin disabled");
     }
 
 
-    public static StelyMarketAreaPlugin getPlugin() {
+    public static StelyMarketPlugin getPlugin() {
         return plugin;
     }
 
@@ -59,5 +64,14 @@ public class StelyMarketAreaPlugin extends JavaPlugin {
             }
         }
         return YamlConfiguration.loadConfiguration(file);
+    }
+
+
+    public YamlConfiguration getConfig() {
+        return config;
+    }
+
+    public DatabaseManager getDatabaseManager() {
+        return databaseManager;
     }
 }
