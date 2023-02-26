@@ -16,6 +16,7 @@ import org.bukkit.event.block.SignChangeEvent;
 
 import fr.army.stelymarket.StelyMarketPlugin;
 import fr.army.stelymarket.utils.MarketArea;
+import fr.army.stelymarket.utils.MarketSign;
 
 public class SignEvent implements Listener {
 
@@ -34,12 +35,14 @@ public class SignEvent implements Listener {
         System.out.println("SignEvent");
 
         Sign sign = (Sign) event.getBlock().getState();
-        // sign.get
 
         int marketId = getIntFromText(event.getLine(1));
 
-        MarketArea marketArea = plugin.getDatabaseManager().getMarketArea(marketId);
+        MarketArea marketArea = MarketArea.get(marketId);
         if (marketArea == null) return;
+
+        MarketSign marketSign = MarketSign.get(marketId);
+        if (marketSign != null) return;
 
         List<String> newContent = config.getStringList("linked_sign");
         for (int i = 0; i < newContent.size(); i++) {
@@ -51,6 +54,13 @@ public class SignEvent implements Listener {
         for (int i = 0; i < newContent.size(); i++) {
             event.setLine(i, newContent.get(i));
         }
+
+        new MarketSign(
+            sign.getX(),
+            sign.getY(),
+            sign.getZ(),
+            marketArea
+        ).saveSign();
     }
 
 

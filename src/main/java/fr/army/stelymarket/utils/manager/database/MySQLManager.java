@@ -10,6 +10,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import fr.army.stelymarket.StelyMarketPlugin;
 import fr.army.stelymarket.utils.MarketArea;
+import fr.army.stelymarket.utils.MarketSign;
 
 
 public class MySQLManager extends DatabaseManager {
@@ -68,19 +69,25 @@ public class MySQLManager extends DatabaseManager {
             try {
                 PreparedStatement queryCreatePlayer = connection.prepareStatement("CREATE TABLE IF NOT EXISTS player (playerId INTEGER AUTO_INCREMENT, playerName VARCHAR(255), startDate VARCHAR(255), endDate VARCHAR(255), marketId INTEGER, PRIMARY KEY (playerId));");
                 PreparedStatement queryCreateMarket = connection.prepareStatement("CREATE TABLE IF NOT EXISTS market (marketId INTEGER AUTO_INCREMENT, price INTEGER, PRIMARY KEY(marketId));");
+                PreparedStatement queryCreateSign = connection.prepareStatement("CREATE TABLE IF NOT EXISTS sign (signId INTEGER AUTO_INCREMENT, x INTEGER, y INTEGER, z INTEGER, marketId INTEGER, PRIMARY KEY(signId));");
 
                 queryCreatePlayer.executeUpdate();
                 queryCreateMarket.executeUpdate();
+                queryCreateSign.executeUpdate();
 
                 queryCreatePlayer.close();
                 queryCreateMarket.close();
+                queryCreateSign.close();
 
 
                 PreparedStatement queryAlterPlayers = connection.prepareStatement("ALTER TABLE player ADD FOREIGN KEY (marketId) REFERENCES market(marketId);");
+                PreparedStatement queryAlterSigns = connection.prepareStatement("ALTER TABLE sign ADD FOREIGN KEY (marketId) REFERENCES market(marketId);");
 
                 queryAlterPlayers.executeUpdate();
+                queryAlterSigns.executeUpdate();
 
                 queryAlterPlayers.close();
+                queryAlterSigns.close();
             } catch (Exception e){
                 e.printStackTrace();
             }
@@ -182,6 +189,7 @@ public class MySQLManager extends DatabaseManager {
                 MarketArea marketArea = null;
                 if(result.next()){
                     marketArea = new MarketArea(
+                        marketId,
                         result.getInt("price")
                     );
                 }
@@ -209,6 +217,106 @@ public class MySQLManager extends DatabaseManager {
                 }
                 query.close();
                 return marketArea;
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public void insertSign(int marketId, int x, int y, int z) {
+        if (isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("INSERT INTO sign (x, y, z, marketId) VALUES (?, ?, ?, ?);");
+                query.setInt(1, x);
+                query.setInt(2, y);
+                query.setInt(3, z);
+                query.setInt(4, marketId);
+                query.executeUpdate();
+                query.close();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void removeSign(int marketId) {
+        if (isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("DELETE FROM sign WHERE marketId = ?;");
+                query.setInt(1, marketId);
+                query.executeUpdate();
+                query.close();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public Integer[] getSignCoords(int marketId) {
+        if (isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT * FROM sign WHERE marketId = ?;");
+                query.setInt(1, marketId);
+                ResultSet result = query.executeQuery();
+                Integer[] coords = new Integer[3];
+                if(result.next()){
+                    coords[0] = result.getInt("x");
+                    coords[1] = result.getInt("y");
+                    coords[2] = result.getInt("z");
+                }
+                query.close();
+                return coords;
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public MarketArea getMarketArea(Integer signId) {
+        if (isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT * FROM market m INNER JOIN sign s ON s.marketId = m.marketId WHERE s.signId = ?;");
+                query.setInt(1, signId);
+                ResultSet result = query.executeQuery();
+                MarketArea marketArea = null;
+                if(result.next()){
+                    marketArea = new MarketArea(
+                        result.getInt("price")
+                    );
+                }
+                query.close();
+                return marketArea;
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public MarketSign getSign(int marketId) {
+        if (isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT * FROM sign WHERE marketId = ?;");
+                query.setInt(1, marketId);
+                ResultSet result = query.executeQuery();
+                MarketSign marketSign = null;
+                if(result.next()){
+                    marketSign = new MarketSign(
+                        result.getInt("x"),
+                        result.getInt("y"),
+                        result.getInt("z"),
+                        MarketArea.get(marketId)
+                    );
+                }
+                query.close();
+                return marketSign;
             } catch (Exception e){
                 e.printStackTrace();
             }

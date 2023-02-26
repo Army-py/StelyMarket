@@ -11,6 +11,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 
 import fr.army.stelymarket.StelyMarketPlugin;
 import fr.army.stelymarket.utils.MarketArea;
+import fr.army.stelymarket.utils.MarketSign;
 
 
 public abstract class DatabaseManager {
@@ -58,7 +59,17 @@ public abstract class DatabaseManager {
 
     public abstract MarketArea getMarketArea(String playerName);
 
+    public abstract MarketArea getMarketArea(Integer signId);
+
     public abstract Integer getLastMarketId();
+
+    public abstract void insertSign(int marketId, int x, int y, int z);
+
+    public abstract void removeSign(int marketId);
+
+    public abstract MarketSign getSign(int marketId);
+
+    public abstract Integer[] getSignCoords(int marketId);
 
 
     protected String getCurrentDate(){

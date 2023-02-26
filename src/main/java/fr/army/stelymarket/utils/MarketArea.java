@@ -18,6 +18,7 @@ public class MarketArea {
 
     private DatabaseManager databaseManager = StelyMarketPlugin.getPlugin().getDatabaseManager();
     
+    private final int marketId;
     private final Integer price;
     private final String regionId;
 
@@ -26,17 +27,28 @@ public class MarketArea {
 
     public MarketArea() {
         this.price = StelyMarketPlugin.getPlugin().getConfig().getInt("default_price");
-        this.regionId = "market_" + IntegerToString(databaseManager.getLastMarketId());
+        this.marketId = databaseManager.getLastMarketId();
+        this.regionId = "market_" + IntegerToString(this.marketId);
     }
 
     public MarketArea(int price) {
         this.price = price;
-        
-        this.regionId = "market_" + IntegerToString(databaseManager.getLastMarketId());
+        this.marketId = databaseManager.getLastMarketId();
+        this.regionId = "market_" + IntegerToString(this.marketId);
+    }
+
+    public MarketArea(int marketId, int price) {
+        this.marketId = marketId;
+        this.price = price;
+        this.regionId = "market_" + IntegerToString(marketId);
     }
 
 
-    public Integer getPrice() {
+    public int getMarketId() {
+        return marketId;
+    }
+
+    public int getPrice() {
         return price;
     }
 
@@ -60,6 +72,11 @@ public class MarketArea {
         );
 
         databaseManager.insertMarket(this.price);
+    }
+
+
+    public static MarketArea get(int marketId){
+        return StelyMarketPlugin.getPlugin().getDatabaseManager().getMarketArea(marketId);
     }
 
 
