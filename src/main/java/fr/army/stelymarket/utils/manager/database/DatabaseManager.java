@@ -10,6 +10,7 @@ import java.util.Map;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import fr.army.stelymarket.StelyMarketPlugin;
+import fr.army.stelymarket.utils.MarketArea;
 
 
 public abstract class DatabaseManager {
@@ -52,6 +53,10 @@ public abstract class DatabaseManager {
     public abstract void updateMarket(int marketId, int price);
 
     public abstract int getMarketPrice(int marketId);
+
+    public abstract MarketArea getMarketArea(int marketId);
+
+    public abstract MarketArea getMarketArea(String playerName);
 
     public abstract Integer getLastMarketId();
 

@@ -5,12 +5,15 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 
+import fr.army.stelymarket.StelyMarketPlugin;
+
 
 public class Buyer {
     
     private final String name;
     private final String startDate;
     private final String endDate;
+    private final MarketArea market;
 
     private UUID uuid;
 
@@ -18,6 +21,8 @@ public class Buyer {
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
+
+        this.market = StelyMarketPlugin.getPlugin().getDatabaseManager().getMarketArea(name);
     }
 
     public String getName() {
@@ -30,6 +35,10 @@ public class Buyer {
 
     public String getEndDate() {
         return endDate;
+    }
+
+    public MarketArea getMarket() {
+        return market;
     }
 
     public OfflinePlayer asPlayer() {

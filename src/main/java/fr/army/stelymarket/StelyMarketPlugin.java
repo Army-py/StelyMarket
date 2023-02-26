@@ -10,6 +10,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import fr.army.stelymarket.commands.CommandManager;
+import fr.army.stelymarket.events.SignEvent;
 import fr.army.stelymarket.utils.manager.database.DatabaseManager;
 
 public class StelyMarketPlugin extends JavaPlugin {
@@ -39,6 +40,8 @@ public class StelyMarketPlugin extends JavaPlugin {
         }
 
         this.commandManager = new CommandManager(this);
+
+        getServer().getPluginManager().registerEvents(new SignEvent(this), this);
 
         getLogger().info("StelyMarketPlugin enabled");
     }

@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import fr.army.stelymarket.StelyMarketPlugin;
+import fr.army.stelymarket.utils.MarketArea;
 
 
 public class MySQLManager extends DatabaseManager {
@@ -123,7 +124,7 @@ public class MySQLManager extends DatabaseManager {
             try {
                 PreparedStatement query = connection.prepareStatement("SELECT marketId FROM market ORDER BY marketId DESC LIMIT 1;");
                 ResultSet result = query.executeQuery();
-                int marketId = 0;
+                int marketId = 1;
                 if(result.next()){
                     marketId = result.getInt("marketId");
                 }
@@ -169,5 +170,49 @@ public class MySQLManager extends DatabaseManager {
             }
         }
         return 0;
+    }
+
+    @Override
+    public MarketArea getMarketArea(int marketId) {
+        if (isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT * FROM market WHERE marketId = ?;");
+                query.setInt(1, marketId);
+                ResultSet result = query.executeQuery();
+                MarketArea marketArea = null;
+                if(result.next()){
+                    marketArea = new MarketArea(
+                        result.getInt("price")
+                    );
+                }
+                query.close();
+                return marketArea;
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public MarketArea getMarketArea(String playerName) {
+        if (isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT * FROM market m INNER JOIN player p ON p.marketId = m.marketId WHERE p.playerName = ?;");
+                query.setString(1, playerName);
+                ResultSet result = query.executeQuery();
+                MarketArea marketArea = null;
+                if(result.next()){
+                    marketArea = new MarketArea(
+                        result.getInt("price")
+                    );
+                }
+                query.close();
+                return marketArea;
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 }

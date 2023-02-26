@@ -17,3 +17,13 @@ region_prefix: "market_" # automatiquement suivi par un chiffre
 
 # Prix par défaut d'un market
 default_price: 5000
+
+# Préfixe à écrire sur la pancarte pour la relier à un market
+sign_prefix: "[stelymarket]"
+
+# Texte une fois la pancarte reliée à un market
+linked_sign:
+  - "§7[§5StelyMarket§7]"
+  - "§aPrix : §e%price%"
+  - "§aFin : §e%end%"
+  - "§7A louer"

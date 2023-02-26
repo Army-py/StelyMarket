@@ -20,8 +20,7 @@ public class MarketArea {
     
     private final Integer price;
     private final String regionId;
-    
-    private Buyer owner;
+
     private ProtectedRegion region;
 
 
@@ -36,10 +35,6 @@ public class MarketArea {
         this.regionId = "market_" + IntegerToString(databaseManager.getLastMarketId());
     }
 
-
-    public Buyer getOwner() {
-        return owner;
-    }
 
     public Integer getPrice() {
         return price;
