@@ -6,6 +6,8 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
+import org.bukkit.Bukkit;
+import org.bukkit.block.Sign;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -30,6 +32,9 @@ public class SignEvent implements Listener {
                 && !isInt(event.getLine(1))) return;
 
         System.out.println("SignEvent");
+
+        Sign sign = (Sign) event.getBlock().getState();
+        // sign.get
 
         int marketId = getIntFromText(event.getLine(1));
 
