@@ -306,4 +306,31 @@ public class SQLiteManager extends DatabaseManager {
         }
         return null;
     }
+
+    @Override
+    public MarketSign getSign(int x, int y, int z) {
+        if (isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT * FROM sign WHERE x = ? AND y = ? AND z = ?;");
+                query.setInt(1, x);
+                query.setInt(2, y);
+                query.setInt(3, z);
+                ResultSet result = query.executeQuery();
+                MarketSign marketSign = null;
+                if(result.next()){
+                    marketSign = new MarketSign(
+                        result.getInt("x"),
+                        result.getInt("y"),
+                        result.getInt("z"),
+                        MarketArea.get(result.getInt("marketId"))
+                    );
+                }
+                query.close();
+                return marketSign;
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
 }

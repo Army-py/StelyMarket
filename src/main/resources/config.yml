@@ -27,3 +27,31 @@ linked_sign:
   - "§aPrix : §e%price%"
   - "§aFin : §e%end%"
   - "§7A louer"
+
+# Texte sur la pancarte une fois qu'un market à été loué
+buyed_market_sign:
+  - "§7[§5StelyMarket§7]"
+  - "§aPrix : §e%price%"
+  - "§aFin : §e%end%"
+  - "§2Loué par %player%"
+
+# Types de pancartes autorisés
+allowed_signs:
+  - "OAK_WALL_SIGN"
+  - "OAK_SIGN"
+  - "BIRCH_WALL_SIGN"
+  - "BIRCH_SIGN"
+  - "SPRUCE_WALL_SIGN"
+  - "SPRUCE_SIGN"
+  - "DARK_OAK_WALL_SIGN"
+  - "DARK_OAK_SIGN"
+  - "ACACIA_WALL_SIGN"
+  - "ACACIA_SIGN"
+  - "JUNGLE_WALL_SIGN"
+  - "JUNGLE_SIGN"
+  - "CRIMSON_WALL_SIGN"
+  - "CRIMSON_SIGN"
+  - "WARPED_WALL_SIGN"
+  - "WARPED_SIGN"
+  - "MANGROVE_WALL_SIGN"
+  - "MANGROVE_SIGN"

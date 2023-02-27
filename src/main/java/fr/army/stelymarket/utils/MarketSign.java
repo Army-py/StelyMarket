@@ -43,4 +43,8 @@ public class MarketSign {
     public static MarketSign get(int marketId){
         return StelyMarketPlugin.getPlugin().getDatabaseManager().getSign(marketId);
     }
+
+    public static MarketSign get(int x, int y, int z){
+        return StelyMarketPlugin.getPlugin().getDatabaseManager().getSign(x, y, z);
+    }
 }

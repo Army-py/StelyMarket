@@ -69,6 +69,8 @@ public abstract class DatabaseManager {
 
     public abstract MarketSign getSign(int marketId);
 
+    public abstract MarketSign getSign(int x, int y, int z);
+
     public abstract Integer[] getSignCoords(int marketId);
 
 
