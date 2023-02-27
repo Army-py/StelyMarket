@@ -10,6 +10,7 @@ import java.util.Map;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import fr.army.stelymarket.StelyMarketPlugin;
+import fr.army.stelymarket.utils.Buyer;
 import fr.army.stelymarket.utils.MarketArea;
 import fr.army.stelymarket.utils.MarketSign;
 
@@ -72,6 +73,12 @@ public abstract class DatabaseManager {
     public abstract MarketSign getSign(int x, int y, int z);
 
     public abstract Integer[] getSignCoords(int marketId);
+
+    public abstract void insertPlayer(String playerName, String startDate, String endDate, int marketId);
+
+    public abstract void removePlayer(String playerName);
+
+    public abstract Buyer getPlayer(String playerName);
 
 
     protected String getCurrentDate(){

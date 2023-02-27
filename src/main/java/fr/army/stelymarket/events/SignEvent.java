@@ -1,8 +1,6 @@
 package fr.army.stelymarket.events;
 
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 
@@ -48,7 +46,7 @@ public class SignEvent implements Listener {
         for (int i = 0; i < newContent.size(); i++) {
             newContent.set(i, newContent.get(i)
                 .replaceAll("%price%", String.valueOf(marketArea.getPrice()))
-                .replaceAll("%end%", getDateEndOfMonth()));
+                .replaceAll("%end%", plugin.getDateEndOfMonth()));
         }
         
         for (int i = 0; i < newContent.size(); i++) {
@@ -80,16 +78,6 @@ public class SignEvent implements Listener {
         } catch (NumberFormatException e) {
             return false;
         }
-    }
-
-    private String getDateEndOfMonth(){
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
-        calendar.set(Calendar.HOUR_OF_DAY, 23);
-        calendar.set(Calendar.MINUTE, 59);
-        calendar.set(Calendar.SECOND, 59);
-        calendar.set(Calendar.MILLISECOND, 999);
-        return new SimpleDateFormat("dd/MM/yyyy").format(calendar.getTime());
     }
 
     private String IntegerToString(Integer value){

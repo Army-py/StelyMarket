@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import fr.army.stelymarket.StelyMarketPlugin;
+import fr.army.stelymarket.utils.Buyer;
 import fr.army.stelymarket.utils.MarketArea;
 import fr.army.stelymarket.utils.MarketSign;
 
@@ -344,6 +345,62 @@ public class MySQLManager extends DatabaseManager {
                 }
                 query.close();
                 return marketSign;
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public void insertPlayer(String playerName, String startDate, String endDate, int marketId) {
+        if (isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("INSERT INTO player (playerName, startDate, endDate, marketId) VALUES (?, ?, ?, ?);");
+                query.setString(1, playerName);
+                query.setString(2, startDate);
+                query.setString(3, endDate);
+                query.setInt(4, marketId);
+                query.executeUpdate();
+                query.close();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void removePlayer(String playerName) {
+        if (isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("DELETE FROM player WHERE playerName = ?;");
+                query.setString(1, playerName);
+                query.executeUpdate();
+                query.close();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public Buyer getPlayer(String playerName) {
+        if (isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT * FROM player WHERE playerName = ?;");
+                query.setString(1, playerName);
+                ResultSet result = query.executeQuery();
+                Buyer buyer = null;
+                if(result.next()){
+                    buyer = new Buyer(
+                        result.getString("playerName"),
+                        result.getString("startDate"),
+                        result.getString("endDate"),
+                        MarketArea.get(result.getInt("marketId"))
+                    );
+                }
+                query.close();
+                return buyer;
             } catch (Exception e){
                 e.printStackTrace();
             }

@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Objects;
 
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -11,6 +13,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import fr.army.stelymarket.commands.CommandManager;
 import fr.army.stelymarket.events.SignEvent;
+import fr.army.stelymarket.utils.manager.EconomyManager;
 import fr.army.stelymarket.utils.manager.database.DatabaseManager;
 
 public class StelyMarketPlugin extends JavaPlugin {
@@ -20,6 +23,7 @@ public class StelyMarketPlugin extends JavaPlugin {
     private YamlConfiguration messages;
     private DatabaseManager databaseManager;
     private CommandManager commandManager;
+    private EconomyManager economyManager;
 
 
     @Override
@@ -40,6 +44,7 @@ public class StelyMarketPlugin extends JavaPlugin {
         }
 
         this.commandManager = new CommandManager(this);
+        this.economyManager = new EconomyManager(this);
 
         getServer().getPluginManager().registerEvents(new SignEvent(this), this);
 
@@ -55,6 +60,23 @@ public class StelyMarketPlugin extends JavaPlugin {
 
     public static StelyMarketPlugin getPlugin() {
         return plugin;
+    }
+
+
+    public String getDateEndOfMonth(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+        calendar.set(Calendar.HOUR_OF_DAY, 23);
+        calendar.set(Calendar.MINUTE, 59);
+        calendar.set(Calendar.SECOND, 59);
+        calendar.set(Calendar.MILLISECOND, 999);
+        return new SimpleDateFormat("dd/MM/yyyy").format(calendar.getTime());
+    }
+
+
+    public String getTodayDate(){
+        Calendar calendar = Calendar.getInstance();
+        return new SimpleDateFormat("dd/MM/yyyy").format(calendar.getTime());
     }
 
 
@@ -76,5 +98,9 @@ public class StelyMarketPlugin extends JavaPlugin {
 
     public DatabaseManager getDatabaseManager() {
         return databaseManager;
+    }
+
+    public EconomyManager getEconomyManager() {
+        return economyManager;
     }
 }

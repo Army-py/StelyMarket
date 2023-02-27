@@ -74,25 +74,22 @@ public class MarketArea {
         databaseManager.insertMarket(this.price);
     }
 
-
-    public static MarketArea get(int marketId){
-        return StelyMarketPlugin.getPlugin().getDatabaseManager().getMarketArea(marketId);
-    }
-
-
     public void remove(World world){
         RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
         RegionManager regions = container.get(world);
         regions.removeRegion(this.regionId);
-
+        
         databaseManager.removeMarket(getIntFromText(this.regionId));
     }
-
-
+    
+    public static MarketArea get(int marketId){
+        return StelyMarketPlugin.getPlugin().getDatabaseManager().getMarketArea(marketId);
+    }
+    
     private String IntegerToString(Integer value){
         return NumberFormat.getNumberInstance(Locale.US).format(value);
     }
-
+    
     private Integer getIntFromText(String text){
         return Integer.parseInt(text.replaceAll("[^0-9]", ""));
     }

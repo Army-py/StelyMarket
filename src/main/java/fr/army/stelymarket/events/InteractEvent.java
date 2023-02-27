@@ -1,13 +1,8 @@
 package fr.army.stelymarket.events;
 
-import org.bukkit.Color;
-import org.bukkit.FireworkEffect;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -15,6 +10,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 import fr.army.stelymarket.StelyMarketPlugin;
+import fr.army.stelymarket.utils.Buyer;
+import fr.army.stelymarket.utils.MarketArea;
 import fr.army.stelymarket.utils.MarketSign;
 
 public class InteractEvent implements Listener {
@@ -34,5 +31,14 @@ public class InteractEvent implements Listener {
         if (marketSign == null) return;
 
         
+        MarketArea marketArea = marketSign.getMarket();
+        Player player = event.getPlayer();
+        
+        Buyer buyer = new Buyer(player.getName(), player.getUniqueId());
+        if (buyer.hasAMarket()) return;
+
+        buyer.buyMarket(marketArea);
+        marketSign.setSign(clickedSign);
+        marketSign.rentedSign(player.getName());
     }
 }
