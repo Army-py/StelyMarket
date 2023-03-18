@@ -1,6 +1,9 @@
 package fr.army.stelymarket.utils;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.bukkit.block.Sign;
 
@@ -27,22 +30,33 @@ public class MarketSign {
     }
 
     public void rentedSign(String playerName){
-        for (int i = 0; i < 4; i++) {
-            sign.setLine(i, StelyMarketPlugin.getPlugin().getConfig().getStringList("buyed_market_sign").get(i));
-        }
-
         List<String> newContent = StelyMarketPlugin.getPlugin().getConfig().getStringList("buyed_market_sign");
         for (int i = 0; i < newContent.size(); i++) {
             newContent.set(i, newContent.get(i)
                 .replaceAll("%price%", String.valueOf(market.getPrice()))
                 .replaceAll("%end%", StelyMarketPlugin.getPlugin().getDateEndOfMonth())
                 .replaceAll("%player%", playerName));
+            if (newContent.get(i).length() > 15 + (getPrefixColors(newContent.get(i)).size()) * 2) newContent.set(i, newContent.get(i).substring(0, 15));
         }
         
         for (int i = 0; i < newContent.size(); i++) {
             sign.setLine(i, newContent.get(i));
         }
+        sign.update();
     }
+
+
+    private ArrayList<String> getPrefixColors(String prefixTeam){
+        Pattern pattern = Pattern.compile("[&§°].");
+        Matcher matcher = pattern.matcher(prefixTeam);
+        ArrayList<String> colors = new ArrayList<>();
+        while (matcher.find()) {
+            String hex = matcher.group().substring(1);
+            colors.add(hex);
+        }
+        return colors;
+    }
+
 
     public int getX() {
         return x;

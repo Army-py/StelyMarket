@@ -33,7 +33,7 @@ buyed_market_sign:
   - "§7[§5StelyMarket§7]"
   - "§aPrix : §e%price%"
   - "§aFin : §e%end%"
-  - "§2Loué par %player%"
+  - "§2Loué : %player%"
 
 # Types de pancartes autorisés
 allowed_signs:

@@ -5,13 +5,17 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import fr.army.stelymarket.commands.CommandManager;
+import fr.army.stelymarket.events.InteractEvent;
 import fr.army.stelymarket.events.SignEvent;
 import fr.army.stelymarket.utils.manager.EconomyManager;
 import fr.army.stelymarket.utils.manager.database.DatabaseManager;
@@ -47,6 +51,7 @@ public class StelyMarketPlugin extends JavaPlugin {
         this.economyManager = new EconomyManager(this);
 
         getServer().getPluginManager().registerEvents(new SignEvent(this), this);
+        getServer().getPluginManager().registerEvents(new InteractEvent(), this);
 
         getLogger().info("StelyMarketPlugin enabled");
     }
