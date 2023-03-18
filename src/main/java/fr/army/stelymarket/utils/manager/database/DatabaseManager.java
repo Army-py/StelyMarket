@@ -5,7 +5,6 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Map;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -73,6 +72,8 @@ public abstract class DatabaseManager {
     public abstract MarketSign getSign(int x, int y, int z);
 
     public abstract Integer[] getSignCoords(int marketId);
+
+    public abstract ArrayList<Integer []> getSignCoords();
 
     public abstract void insertPlayer(String playerName, String startDate, String endDate, int marketId);
 

@@ -19,18 +19,22 @@ region_prefix: "market_" # automatiquement suivi par un chiffre
 default_price: 5000
 
 # Préfixe à écrire sur la pancarte pour la relier à un market
-sign_prefix: "[stelymarket]"
+create_sign_prefix: "[stelymarket]"
+
+# Préfixe qui sera écris une fois la pancarte reliée à un market
+# %prefix% = préfixe de la pancarte
+linked_sign_prefix: "§7[§5StelyMarket§7]"
 
 # Texte une fois la pancarte reliée à un market
 linked_sign:
-  - "§7[§5StelyMarket§7]"
+  - "%prefix%"
   - "§aPrix : §e%price%"
   - "§aFin : §e%end%"
   - "§7A louer"
 
 # Texte sur la pancarte une fois qu'un market à été loué
 buyed_market_sign:
-  - "§7[§5StelyMarket§7]"
+  - "%prefix%"
   - "§aPrix : §e%price%"
   - "§aFin : §e%end%"
   - "§2Loué : %player%"

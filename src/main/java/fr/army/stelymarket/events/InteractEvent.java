@@ -1,7 +1,5 @@
 package fr.army.stelymarket.events;
 
-import java.util.List;
-
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -30,7 +28,7 @@ public class InteractEvent implements Listener {
         System.out.println(3);
         Sign clickedSign = (Sign) event.getClickedBlock().getState();
         System.out.println(4);
-        if (!config.getStringList("linked_sign").toArray()[0].equals(clickedSign.getLines()[0])) return;
+        if (!config.getString("linked_sign_prefix").equals(clickedSign.getLines()[0])) return;
         
         System.out.println(5);
         Location loc = clickedSign.getLocation();
@@ -50,16 +48,5 @@ public class InteractEvent implements Listener {
         buyer.buyMarket(marketArea);
         marketSign.setSign(clickedSign);
         marketSign.rentedSign(player.getName());
-        // List<String> newContent = StelyMarketPlugin.getPlugin().getConfig().getStringList("buyed_market_sign");
-        // for (int i = 0; i < 4; i++) {
-        //     newContent.set(i, newContent.get(i)
-        //         .replaceAll("%price%", String.valueOf(marketArea.getPrice()))
-        //         .replaceAll("%end%", StelyMarketPlugin.getPlugin().getDateEndOfMonth())
-        //         .replaceAll("%player%", player.getName()));
-        // }
-        
-        // for (int i = 0; i < 4; i++) {
-        //     clickedSign.setLine(i, newContent.get(i));
-        // }
     }
 }

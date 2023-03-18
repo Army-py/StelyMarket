@@ -26,7 +26,7 @@ public class SignEvent implements Listener {
     
     @EventHandler
     public void onSignChange(SignChangeEvent event) {
-        if (!event.getLine(0).equalsIgnoreCase(config.getString("sign_prefix"))
+        if (!event.getLine(0).equalsIgnoreCase(config.getString("create_sign_prefix"))
                 && !isInt(event.getLine(1))) return;
 
         System.out.println("SignEvent");
@@ -45,6 +45,7 @@ public class SignEvent implements Listener {
         List<String> newContent = config.getStringList("linked_sign");
         for (int i = 0; i < newContent.size(); i++) {
             newContent.set(i, newContent.get(i)
+                .replaceAll("%prefix%", config.getString("linked_sign_prefix"))
                 .replaceAll("%price%", String.valueOf(marketArea.getPrice()))
                 .replaceAll("%end%", plugin.getDateEndOfMonth()));
         }
@@ -78,9 +79,5 @@ public class SignEvent implements Listener {
         } catch (NumberFormatException e) {
             return false;
         }
-    }
-
-    private String IntegerToString(Integer value){
-        return NumberFormat.getNumberInstance(Locale.US).format(value);
     }
 }

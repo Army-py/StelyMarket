@@ -33,6 +33,7 @@ public class MarketSign {
         List<String> newContent = StelyMarketPlugin.getPlugin().getConfig().getStringList("buyed_market_sign");
         for (int i = 0; i < newContent.size(); i++) {
             newContent.set(i, newContent.get(i)
+                .replaceAll("%prefix%", StelyMarketPlugin.getPlugin().getConfig().getString("linked_sign_prefix"))
                 .replaceAll("%price%", String.valueOf(market.getPrice()))
                 .replaceAll("%end%", StelyMarketPlugin.getPlugin().getDateEndOfMonth())
                 .replaceAll("%player%", playerName));

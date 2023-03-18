@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -384,6 +385,29 @@ public class SQLiteManager extends DatabaseManager {
                 }
                 query.close();
                 return buyer;
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public ArrayList<Integer[]> getSignCoords() {
+        if (isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT * FROM sign;");
+                ResultSet result = query.executeQuery();
+                ArrayList<Integer[]> coords = new ArrayList<>();
+                while(result.next()){
+                    Integer[] coord = new Integer[3];
+                    coord[0] = result.getInt("x");
+                    coord[1] = result.getInt("y");
+                    coord[2] = result.getInt("z");
+                    coords.add(coord);
+                }
+                query.close();
+                return coords;
             } catch (Exception e){
                 e.printStackTrace();
             }

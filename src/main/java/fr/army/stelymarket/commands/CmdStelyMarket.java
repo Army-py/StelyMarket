@@ -14,18 +14,15 @@ import org.bukkit.entity.Player;
 import fr.army.stelymarket.StelyMarketPlugin;
 import fr.army.stelymarket.commands.subCommands.SubCmdCreate;
 import fr.army.stelymarket.commands.subCommands.SubCmdHelp;
-import fr.army.stelymarket.utils.manager.database.DatabaseManager;
 
 public class CmdStelyMarket implements CommandExecutor, TabCompleter {
 
     private StelyMarketPlugin plugin;
-    private DatabaseManager sqlManager;
     private Map<String, Object> subCommands;
 
 
     public CmdStelyMarket(StelyMarketPlugin plugin) {
         this.plugin = plugin;
-        this.sqlManager = plugin.getDatabaseManager();
         this.subCommands = new HashMap<>();
         initSubCommands();
     }
