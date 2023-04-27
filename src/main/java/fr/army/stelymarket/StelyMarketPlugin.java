@@ -74,7 +74,7 @@ public class StelyMarketPlugin extends JavaPlugin {
         calendar.set(Calendar.MINUTE, 59);
         calendar.set(Calendar.SECOND, 59);
         calendar.set(Calendar.MILLISECOND, 999);
-        return new SimpleDateFormat("dd/MM/yyyy").format(calendar.getTime());
+        return new SimpleDateFormat("dd/MM").format(calendar.getTime());
     }
 
 

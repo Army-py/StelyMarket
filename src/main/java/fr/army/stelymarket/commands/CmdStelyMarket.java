@@ -31,7 +31,6 @@ public class CmdStelyMarket implements CommandExecutor, TabCompleter {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(sender instanceof Player){
             Player player = (Player) sender;
-            String playerName = player.getName();
             
             if (args.length == 0){
                 return true;

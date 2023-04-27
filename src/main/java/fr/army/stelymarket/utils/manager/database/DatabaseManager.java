@@ -49,6 +49,8 @@ public abstract class DatabaseManager {
 
     public abstract void insertMarket(int price);
 
+    public abstract void insertMarket(int marketId, int price);
+
     public abstract void removeMarket(int marketId);
 
     public abstract void updateMarket(int marketId, int price);

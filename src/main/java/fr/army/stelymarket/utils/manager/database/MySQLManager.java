@@ -113,6 +113,22 @@ public class MySQLManager extends DatabaseManager {
 
 
     @Override
+    public void insertMarket(int marketId, int price){
+        if (isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("INSERT INTO market (marketId, price) VALUES (?, ?);");
+                query.setInt(1, marketId);
+                query.setInt(2, price);
+                query.executeUpdate();
+                query.close();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    @Override
     public void removeMarket(int marketId){
         if (isConnected()){
             try {
@@ -133,7 +149,7 @@ public class MySQLManager extends DatabaseManager {
             try {
                 PreparedStatement query = connection.prepareStatement("SELECT marketId FROM market ORDER BY marketId DESC LIMIT 1;");
                 ResultSet result = query.executeQuery();
-                int marketId = 1;
+                int marketId = 0;
                 if(result.next()){
                     marketId = result.getInt("marketId");
                 }

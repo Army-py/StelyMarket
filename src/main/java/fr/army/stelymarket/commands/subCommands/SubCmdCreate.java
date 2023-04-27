@@ -26,7 +26,6 @@ public class SubCmdCreate extends SubCommand {
 
     @Override
     public boolean execute(CommandSender sender, String[] args) {
-
         Player actor = BukkitAdapter.adapt((org.bukkit.entity.Player) sender); // WorldEdit's native Player class extends Actor
         SessionManager manager = WorldEdit.getInstance().getSessionManager();
         LocalSession localSession = manager.get(actor);

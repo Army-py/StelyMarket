@@ -20,21 +20,21 @@ public class InteractEvent implements Listener {
     
     @EventHandler
     public void onClick(PlayerInteractEvent event) {
-        System.out.println(1);
+        // System.out.println(1);
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
-        System.out.println(2);
+        // System.out.println(2);
         if (!config.getStringList("allowed_signs").contains(event.getClickedBlock().getType().name())) return;
         
-        System.out.println(3);
+        // System.out.println(3);
         Sign clickedSign = (Sign) event.getClickedBlock().getState();
-        System.out.println(4);
+        // System.out.println(4);
         if (!config.getString("linked_sign_prefix").equals(clickedSign.getLines()[0])) return;
         
-        System.out.println(5);
+        // System.out.println(5);
         Location loc = clickedSign.getLocation();
         MarketSign marketSign = MarketSign.get(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
         if (marketSign == null) return;
-        System.out.println(6);
+        // System.out.println(6);
 
         
         MarketArea marketArea = marketSign.getMarket();
@@ -43,7 +43,7 @@ public class InteractEvent implements Listener {
         Buyer buyer = new Buyer(player.getName(), player.getUniqueId());
         if (buyer.hasAMarket()) return;
 
-        System.out.println(7);
+        // System.out.println(7);
 
         buyer.buyMarket(marketArea);
         marketSign.setSign(clickedSign);

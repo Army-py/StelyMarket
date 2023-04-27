@@ -96,6 +96,22 @@ public class SQLiteManager extends DatabaseManager {
 
 
     @Override
+    public void insertMarket(int marketId, int price){
+        if (isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("INSERT INTO market (marketId, price) VALUES (?, ?);");
+                query.setInt(1, marketId);
+                query.setInt(2, price);
+                query.executeUpdate();
+                query.close();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    @Override
     public void removeMarket(int marketId){
         if (isConnected()){
             try {
