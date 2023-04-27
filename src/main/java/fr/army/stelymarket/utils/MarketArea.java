@@ -3,6 +3,9 @@ package fr.army.stelymarket.utils;
 import java.text.NumberFormat;
 import java.util.Locale;
 
+import org.bukkit.Bukkit;
+
+import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.world.World;
 import com.sk89q.worldguard.WorldGuard;
@@ -18,6 +21,7 @@ public class MarketArea {
 
     private DatabaseManager databaseManager = StelyMarketPlugin.getPlugin().getDatabaseManager();
     
+    private final String worldName;
     private final int marketId;
     private final Integer price;
     private final String regionId;
@@ -25,19 +29,22 @@ public class MarketArea {
     private ProtectedRegion region;
 
 
-    public MarketArea() {
+    public MarketArea(String worldName) {
+        this.worldName = worldName;
         this.price = StelyMarketPlugin.getPlugin().getConfig().getInt("default_price");
         this.marketId = databaseManager.getLastMarketId()+1;
         this.regionId = "market_" + IntegerToString(this.marketId);
     }
 
-    public MarketArea(int price) {
+    public MarketArea(String worldName, int price) {
+        this.worldName = worldName;
         this.price = price;
         this.marketId = databaseManager.getLastMarketId()+1;
         this.regionId = "market_" + IntegerToString(this.marketId);
     }
 
-    public MarketArea(int marketId, int price) {
+    public MarketArea(String worldName, int marketId, int price) {
+        this.worldName = worldName;
         this.marketId = marketId;
         this.price = price;
         this.regionId = "market_" + IntegerToString(marketId);
@@ -72,18 +79,20 @@ public class MarketArea {
         );
 
         // if (get(marketId) == null){
-        databaseManager.insertMarket(this.marketId, this.price);
+        databaseManager.insertMarket(this.marketId, this.price, region.getWorld().getName());
         // }else{
         //     databaseManager.insertMarket(databaseManager.getLastMarketId()+1, this.price);
         // }
     }
 
-    public void remove(World world){
+    public void remove(){
         RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
-        RegionManager regions = container.get(world);
+        RegionManager regions = container.get(new BukkitWorld(Bukkit.getServer().getWorld(worldName)));
         regions.removeRegion(this.regionId);
         
-        databaseManager.removeMarket(getIntFromText(this.regionId));
+        databaseManager.removeSign(marketId);
+        databaseManager.removePlayer(marketId);
+        databaseManager.removeMarket(this.marketId);
     }
     
     public static MarketArea get(int marketId){

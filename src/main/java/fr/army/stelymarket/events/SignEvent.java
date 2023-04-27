@@ -47,7 +47,7 @@ public class SignEvent implements Listener {
             newContent.set(i, newContent.get(i)
                 .replaceAll("%prefix%", config.getString("linked_sign_prefix"))
                 .replaceAll("%price%", String.valueOf(marketArea.getPrice()))
-                .replaceAll("%end%", plugin.getDateEndOfMonth()));
+                .replaceAll("%end%", plugin.dateToString(plugin.getDateEndOfMonth(), "dd/MM")));
         }
         
         for (int i = 0; i < newContent.size(); i++) {

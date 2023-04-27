@@ -8,6 +8,7 @@ import fr.army.stelymarket.StelyMarketPlugin;
 
 
 public abstract class SubCommand {
+    
     protected StelyMarketPlugin plugin;
 
     public SubCommand(StelyMarketPlugin plugin){

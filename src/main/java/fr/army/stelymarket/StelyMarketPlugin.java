@@ -67,20 +67,18 @@ public class StelyMarketPlugin extends JavaPlugin {
     }
 
 
-    public String getDateEndOfMonth(){
+    public Calendar getDateEndOfMonth(){
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
         calendar.set(Calendar.HOUR_OF_DAY, 23);
         calendar.set(Calendar.MINUTE, 59);
         calendar.set(Calendar.SECOND, 59);
-        calendar.set(Calendar.MILLISECOND, 999);
-        return new SimpleDateFormat("dd/MM").format(calendar.getTime());
+        return calendar;
     }
 
 
-    public String getTodayDate(){
-        Calendar calendar = Calendar.getInstance();
-        return new SimpleDateFormat("dd/MM/yyyy").format(calendar.getTime());
+    public String dateToString(Calendar calendar, String dateFormat){
+        return new SimpleDateFormat(dateFormat).format(calendar.getTime());
     }
 
 

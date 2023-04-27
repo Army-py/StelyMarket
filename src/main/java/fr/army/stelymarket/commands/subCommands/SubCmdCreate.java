@@ -31,6 +31,7 @@ public class SubCmdCreate extends SubCommand {
         LocalSession localSession = manager.get(actor);
         Region region;
         World selectionWorld = localSession.getSelectionWorld();
+        
         try {
             if (selectionWorld == null) throw new IncompleteRegionException();
             region = localSession.getSelection(selectionWorld);
@@ -39,7 +40,7 @@ public class SubCmdCreate extends SubCommand {
             return true;
         }
 
-        new MarketArea().create(region);
+        new MarketArea(selectionWorld.getName()).create(region);
 
         actor.print(TextComponent.of("Market créée !"));
 

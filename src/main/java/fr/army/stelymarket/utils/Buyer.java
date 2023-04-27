@@ -1,5 +1,7 @@
 package fr.army.stelymarket.utils;
 
+import java.sql.Date;
+import java.util.Calendar;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -9,13 +11,15 @@ import fr.army.stelymarket.StelyMarketPlugin;
 
 
 public class Buyer {
+
+    private final StelyMarketPlugin plugin = StelyMarketPlugin.getPlugin();
     
     private final String name;
     
     private MarketArea market;
     private UUID uuid;
-    private String startDate;
-    private String endDate;
+    private Calendar startDate;
+    private Calendar endDate;
 
     public Buyer(String name, UUID uuid) {
         this.name = name;
@@ -24,18 +28,27 @@ public class Buyer {
         this.market = StelyMarketPlugin.getPlugin().getDatabaseManager().getMarketArea(name);
     }
 
-    public Buyer(String name, String startDate, String endDate, MarketArea market) {
+    public Buyer(String name, Calendar startDate, Calendar endDate, MarketArea market) {
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;
         this.market = market;
     }
 
+    public Buyer(String name, Date startDate, Date endDate, MarketArea marketArea) {
+        this.name = name;
+        this.startDate = Calendar.getInstance();
+        this.startDate.setTimeInMillis(startDate.getTime());
+        this.endDate = Calendar.getInstance();
+        this.endDate.setTimeInMillis(endDate.getTime());
+        this.market = marketArea;
+    }
+
     public void buyMarket(MarketArea market) {
         if (hasAMarket()) return;
         this.market = market;
-        this.startDate = StelyMarketPlugin.getPlugin().getTodayDate();
-        this.endDate = StelyMarketPlugin.getPlugin().getDateEndOfMonth();
+        this.startDate = Calendar.getInstance();
+        this.endDate = plugin.getDateEndOfMonth();
         StelyMarketPlugin.getPlugin().getEconomyManager().removeMoneyPlayer(asPlayer(), market.getPrice());
         StelyMarketPlugin.getPlugin().getDatabaseManager().insertPlayer(name, startDate, endDate, market.getMarketId());
     }
@@ -44,11 +57,11 @@ public class Buyer {
         return name;
     }
 
-    public String getStartDate() {
+    public Calendar getStartDate() {
         return startDate;
     }
 
-    public String getEndDate() {
+    public Calendar getEndDate() {
         return endDate;
     }
 

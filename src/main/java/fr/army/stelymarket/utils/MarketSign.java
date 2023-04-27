@@ -10,6 +10,8 @@ import org.bukkit.block.Sign;
 import fr.army.stelymarket.StelyMarketPlugin;
 
 public class MarketSign {
+
+    private final StelyMarketPlugin plugin = StelyMarketPlugin.getPlugin();
     
     private final int x;
     private final int y;
@@ -26,16 +28,16 @@ public class MarketSign {
     }
 
     public void saveSign(){
-        StelyMarketPlugin.getPlugin().getDatabaseManager().insertSign(market.getMarketId(), x, y, z);
+        plugin.getDatabaseManager().insertSign(market.getMarketId(), x, y, z);
     }
 
     public void rentedSign(String playerName){
-        List<String> newContent = StelyMarketPlugin.getPlugin().getConfig().getStringList("buyed_market_sign");
+        List<String> newContent = plugin.getConfig().getStringList("buyed_market_sign");
         for (int i = 0; i < newContent.size(); i++) {
             newContent.set(i, newContent.get(i)
-                .replaceAll("%prefix%", StelyMarketPlugin.getPlugin().getConfig().getString("linked_sign_prefix"))
+                .replaceAll("%prefix%", plugin.getConfig().getString("linked_sign_prefix"))
                 .replaceAll("%price%", String.valueOf(market.getPrice()))
-                .replaceAll("%end%", StelyMarketPlugin.getPlugin().getDateEndOfMonth())
+                .replaceAll("%end%", plugin.dateToString(plugin.getDateEndOfMonth(), "dd/MM"))
                 .replaceAll("%player%", playerName));
             if (newContent.get(i).length() > 15 + (getPrefixColors(newContent.get(i)).size()) * 2) newContent.set(i, newContent.get(i).substring(0, 15));
         }

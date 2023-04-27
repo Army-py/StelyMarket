@@ -47,9 +47,7 @@ public abstract class DatabaseManager {
 
     public abstract void createTables();
 
-    public abstract void insertMarket(int price);
-
-    public abstract void insertMarket(int marketId, int price);
+    public abstract void insertMarket(int marketId, int price, String worldName);
 
     public abstract void removeMarket(int marketId);
 
@@ -77,11 +75,13 @@ public abstract class DatabaseManager {
 
     public abstract ArrayList<Integer []> getSignCoords();
 
-    public abstract void insertPlayer(String playerName, String startDate, String endDate, int marketId);
+    public abstract void insertPlayer(String playerName, Calendar startDate, Calendar endDate, int marketId);
 
-    public abstract void removePlayer(String playerName);
+    public abstract void removePlayer(int marketId);
 
     public abstract Buyer getPlayer(String playerName);
+
+    public abstract ArrayList<MarketArea> getExpiredMarkets();
 
 
     protected String getCurrentDate(){

@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 
 import fr.army.stelymarket.StelyMarketPlugin;
 import fr.army.stelymarket.commands.subCommands.SubCmdCreate;
+import fr.army.stelymarket.commands.subCommands.SubCmdExpired;
 import fr.army.stelymarket.commands.subCommands.SubCmdHelp;
 
 public class CmdStelyMarket implements CommandExecutor, TabCompleter {
@@ -87,5 +88,6 @@ public class CmdStelyMarket implements CommandExecutor, TabCompleter {
     private void initSubCommands(){
         subCommands.put("help", new SubCmdHelp(plugin));
         subCommands.put("create", new SubCmdCreate(plugin));
+        subCommands.put("expired", new SubCmdExpired(plugin));
     }
 }
