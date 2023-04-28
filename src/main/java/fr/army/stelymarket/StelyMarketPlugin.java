@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Objects;
 
@@ -15,6 +16,7 @@ import fr.army.stelymarket.commands.CommandManager;
 import fr.army.stelymarket.events.BreakEvent;
 import fr.army.stelymarket.events.InteractEvent;
 import fr.army.stelymarket.events.SignEvent;
+import fr.army.stelymarket.utils.MarketArea;
 import fr.army.stelymarket.utils.manager.EconomyManager;
 import fr.army.stelymarket.utils.manager.database.DatabaseManager;
 
@@ -53,6 +55,13 @@ public class StelyMarketPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new BreakEvent(), this);
 
         getLogger().info("StelyMarketPlugin enabled");
+
+
+        // Delete expired markets
+        ArrayList<MarketArea> markets = plugin.getDatabaseManager().getExpiredMarkets();
+        for (MarketArea market : markets) {
+            market.expired();
+        }
     }
 
 

@@ -2,12 +2,14 @@ package fr.army.stelymarket.commands.subCommands;
 
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
 import com.sk89q.worldedit.IncompleteRegionException;
 import com.sk89q.worldedit.LocalSession;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.entity.Player;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldedit.session.SessionManager;
@@ -40,7 +42,7 @@ public class SubCmdCreate extends SubCommand {
             return true;
         }
 
-        new MarketArea(selectionWorld.getName()).create(region);
+        new MarketArea(Bukkit.getWorld(selectionWorld.getName())).create(region);
 
         actor.print(TextComponent.of("Market créée !"));
 

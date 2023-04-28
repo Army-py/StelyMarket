@@ -46,7 +46,6 @@ public class InteractEvent implements Listener {
         // System.out.println(7);
 
         buyer.buyMarket(marketArea);
-        marketSign.setSign(clickedSign);
-        marketSign.rentedSign(player.getName());
+        marketSign.rentedSign(clickedSign, player.getName());
     }
 }

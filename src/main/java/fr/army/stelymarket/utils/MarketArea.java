@@ -4,10 +4,12 @@ import java.text.NumberFormat;
 import java.util.Locale;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Sign;
 
 import com.sk89q.worldedit.bukkit.BukkitWorld;
 import com.sk89q.worldedit.regions.Region;
-import com.sk89q.worldedit.world.World;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
@@ -21,7 +23,7 @@ public class MarketArea {
 
     private DatabaseManager databaseManager = StelyMarketPlugin.getPlugin().getDatabaseManager();
     
-    private final String worldName;
+    private final World world;
     private final int marketId;
     private final Integer price;
     private final String regionId;
@@ -29,27 +31,34 @@ public class MarketArea {
     private ProtectedRegion region;
 
 
-    public MarketArea(String worldName) {
-        this.worldName = worldName;
+    public MarketArea(World world) {
+        this.world = world;
         this.price = StelyMarketPlugin.getPlugin().getConfig().getInt("default_price");
         this.marketId = databaseManager.getLastMarketId()+1;
         this.regionId = "market_" + IntegerToString(this.marketId);
     }
 
-    public MarketArea(String worldName, int price) {
-        this.worldName = worldName;
+    public MarketArea(World world, int price) {
+        this.world = world;
         this.price = price;
         this.marketId = databaseManager.getLastMarketId()+1;
         this.regionId = "market_" + IntegerToString(this.marketId);
     }
 
-    public MarketArea(String worldName, int marketId, int price) {
-        this.worldName = worldName;
+    public MarketArea(World world, int marketId, int price) {
+        this.world = world;
         this.marketId = marketId;
         this.price = price;
         this.regionId = "market_" + IntegerToString(marketId);
     }
 
+    public World getWorld() {
+        return world;
+    }
+
+    public org.bukkit.World getBukkitWorld() {
+        return Bukkit.getWorld(world.getName());
+    }
 
     public int getMarketId() {
         return marketId;
@@ -87,12 +96,23 @@ public class MarketArea {
 
     public void remove(){
         RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
-        RegionManager regions = container.get(new BukkitWorld(Bukkit.getServer().getWorld(worldName)));
+        RegionManager regions = container.get(new BukkitWorld(Bukkit.getServer().getWorld(world.getName())));
         regions.removeRegion(this.regionId);
         
         databaseManager.removeSign(marketId);
         databaseManager.removePlayer(marketId);
         databaseManager.removeMarket(this.marketId);
+    }
+
+    public void expired(){
+        RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
+        RegionManager regions = container.get(new BukkitWorld(Bukkit.getServer().getWorld(world.getName())));
+        regions.removeRegion(this.regionId);
+        
+        MarketSign marketSign = databaseManager.getSign(marketId);
+        Sign sign = (Sign) Bukkit.getWorld(world.getName()).getBlockAt(marketSign.getLocation()).getState();
+        marketSign.linkedSign(sign);
+        databaseManager.removePlayer(marketId);
     }
     
     public static MarketArea get(int marketId){

@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.bukkit.Location;
 import org.bukkit.block.Sign;
+import org.bukkit.event.block.SignChangeEvent;
 
 import fr.army.stelymarket.StelyMarketPlugin;
 
@@ -18,8 +20,6 @@ public class MarketSign {
     private final int z;
     private final MarketArea market;
 
-    private Sign sign;
-
     public MarketSign(int x, int y, int z, MarketArea market) {
         this.x = x;
         this.y = y;
@@ -31,7 +31,38 @@ public class MarketSign {
         plugin.getDatabaseManager().insertSign(market.getMarketId(), x, y, z);
     }
 
-    public void rentedSign(String playerName){
+    public void linkedSign(SignChangeEvent event){
+        List<String> newContent = plugin.getConfig().getStringList("linked_sign");
+        for (int i = 0; i < newContent.size(); i++) {
+            newContent.set(i, newContent.get(i)
+                .replaceAll("%prefix%", plugin.getConfig().getString("linked_sign_prefix"))
+                .replaceAll("%price%", String.valueOf(market.getPrice()))
+                .replaceAll("%end%", plugin.dateToString(plugin.getDateEndOfMonth(), "dd/MM")));
+        }
+        
+        for (int i = 0; i < newContent.size(); i++) {
+            event.setLine(i, newContent.get(i));
+        }
+    }
+
+
+    public void linkedSign(Sign sign){
+        List<String> newContent = plugin.getConfig().getStringList("linked_sign");
+        for (int i = 0; i < newContent.size(); i++) {
+            newContent.set(i, newContent.get(i)
+                .replaceAll("%prefix%", plugin.getConfig().getString("linked_sign_prefix"))
+                .replaceAll("%price%", String.valueOf(market.getPrice()))
+                .replaceAll("%end%", plugin.dateToString(plugin.getDateEndOfMonth(), "dd/MM")));
+        }
+        
+        for (int i = 0; i < newContent.size(); i++) {
+            sign.setLine(i, newContent.get(i));
+        }
+        sign.update();
+    }
+
+
+    public void rentedSign(Sign sign, String playerName){
         List<String> newContent = plugin.getConfig().getStringList("buyed_market_sign");
         for (int i = 0; i < newContent.size(); i++) {
             newContent.set(i, newContent.get(i)
@@ -77,12 +108,8 @@ public class MarketSign {
         return market;
     }
 
-    public Integer[] getCoords() {
-        return new Integer[] {(int) x, (int) y, (int) z};
-    }
-
-    public void setSign(Sign sign) {
-        this.sign = sign;
+    public Location getLocation() {
+        return new Location(market.getBukkitWorld(), x, y, z);
     }
 
     public static MarketSign get(int marketId){

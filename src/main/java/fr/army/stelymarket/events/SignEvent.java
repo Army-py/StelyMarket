@@ -39,27 +39,17 @@ public class SignEvent implements Listener {
         MarketArea marketArea = MarketArea.get(marketId);
         if (marketArea == null) return;
 
-        MarketSign marketSign = MarketSign.get(marketId);
-        if (marketSign != null) return;
-
-        List<String> newContent = config.getStringList("linked_sign");
-        for (int i = 0; i < newContent.size(); i++) {
-            newContent.set(i, newContent.get(i)
-                .replaceAll("%prefix%", config.getString("linked_sign_prefix"))
-                .replaceAll("%price%", String.valueOf(marketArea.getPrice()))
-                .replaceAll("%end%", plugin.dateToString(plugin.getDateEndOfMonth(), "dd/MM")));
-        }
+        if (MarketSign.get(marketId) != null) return;
         
-        for (int i = 0; i < newContent.size(); i++) {
-            event.setLine(i, newContent.get(i));
-        }
-
-        new MarketSign(
+        MarketSign marketSign = new MarketSign(
             sign.getX(),
             sign.getY(),
             sign.getZ(),
             marketArea
-        ).saveSign();
+            );
+
+        marketSign.linkedSign(event);
+        marketSign.saveSign();
     }
 
 

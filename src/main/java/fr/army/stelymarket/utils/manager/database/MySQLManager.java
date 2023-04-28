@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import fr.army.stelymarket.StelyMarketPlugin;
@@ -195,7 +196,7 @@ public class MySQLManager extends DatabaseManager {
                 MarketArea marketArea = null;
                 if(result.next()){
                     marketArea = new MarketArea(
-                        result.getString("world"),
+                        Bukkit.getWorld(result.getString("world")),
                         marketId,
                         result.getInt("price")
                     );
@@ -219,7 +220,7 @@ public class MySQLManager extends DatabaseManager {
                 MarketArea marketArea = null;
                 if(result.next()){
                     marketArea = new MarketArea(
-                        result.getString("world"),
+                        Bukkit.getWorld(result.getString("world")),
                         result.getInt("price")
                     );
                 }
@@ -295,7 +296,7 @@ public class MySQLManager extends DatabaseManager {
                 MarketArea marketArea = null;
                 if(result.next()){
                     marketArea = new MarketArea(
-                        result.getString("world"),
+                        Bukkit.getWorld(result.getString("world")),
                         result.getInt("price")
                     );
                 }
@@ -450,7 +451,7 @@ public class MySQLManager extends DatabaseManager {
                 while(result.next()){
                     markets.add(
                         new MarketArea(
-                            result.getString("world"),
+                            Bukkit.getWorld(result.getString("world")),
                             result.getInt("marketId"),
                             result.getInt("price")
                         )
