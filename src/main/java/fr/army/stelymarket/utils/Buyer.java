@@ -76,4 +76,16 @@ public class Buyer {
     public boolean hasAMarket() {
         return market != null;
     }
+
+    public boolean inConfirmation() {
+        return StelyMarketPlugin.getPlugin().getCacheManager().playerHasActionName(name, TemporaryActionNames.BUY_CONFIRMATION);
+    }
+
+    public void addConfirmation() {
+        StelyMarketPlugin.getPlugin().getCacheManager().addTempAction(name, TemporaryActionNames.BUY_CONFIRMATION);
+    }
+
+    public void removeConfirmation() {
+        StelyMarketPlugin.getPlugin().getCacheManager().removePlayerActionName(name, TemporaryActionNames.BUY_CONFIRMATION);
+    }
 }

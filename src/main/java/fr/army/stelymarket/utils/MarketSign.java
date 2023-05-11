@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Sign;
 import org.bukkit.event.block.SignChangeEvent;
 
@@ -77,6 +79,14 @@ public class MarketSign {
             sign.setLine(i, newContent.get(i));
         }
         sign.update();
+    }
+
+
+    public void removeSign(){
+        Sign sign = (Sign) Bukkit.getWorld(market.getWorld().getName()).getBlockAt(x, y, z).getState();
+        if (sign.isPlaced()) sign.getBlock().setBlockData(Material.AIR.createBlockData());
+
+        plugin.getDatabaseManager().removeSign(market.getMarketId());
     }
 
 

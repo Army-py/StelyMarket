@@ -448,4 +448,29 @@ public class SQLiteManager extends DatabaseManager {
         }
         return null;
     }
+
+    @Override
+    public ArrayList<MarketArea> getMarketAreas() {
+        if (isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT * FROM market;");
+                ResultSet result = query.executeQuery();
+                ArrayList<MarketArea> markets = new ArrayList<>();
+                while(result.next()){
+                    markets.add(
+                        new MarketArea(
+                            Bukkit.getWorld(result.getString("world")),
+                            result.getInt("marketId"),
+                            result.getInt("price")
+                        )
+                    );
+                }
+                query.close();
+                return markets;
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
 }

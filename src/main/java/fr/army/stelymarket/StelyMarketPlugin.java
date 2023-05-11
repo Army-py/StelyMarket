@@ -17,6 +17,7 @@ import fr.army.stelymarket.events.BreakEvent;
 import fr.army.stelymarket.events.InteractEvent;
 import fr.army.stelymarket.events.SignEvent;
 import fr.army.stelymarket.utils.MarketArea;
+import fr.army.stelymarket.utils.manager.CacheManager;
 import fr.army.stelymarket.utils.manager.EconomyManager;
 import fr.army.stelymarket.utils.manager.database.DatabaseManager;
 
@@ -28,6 +29,7 @@ public class StelyMarketPlugin extends JavaPlugin {
     private DatabaseManager databaseManager;
     private CommandManager commandManager;
     private EconomyManager economyManager;
+    private CacheManager cacheManager;
 
 
     @Override
@@ -49,6 +51,7 @@ public class StelyMarketPlugin extends JavaPlugin {
 
         this.commandManager = new CommandManager(this);
         this.economyManager = new EconomyManager(this);
+        this.cacheManager = new CacheManager();
 
         getServer().getPluginManager().registerEvents(new SignEvent(this), this);
         getServer().getPluginManager().registerEvents(new InteractEvent(), this);
@@ -61,6 +64,7 @@ public class StelyMarketPlugin extends JavaPlugin {
         ArrayList<MarketArea> markets = plugin.getDatabaseManager().getExpiredMarkets();
         for (MarketArea market : markets) {
             market.expired();
+            market.clearMarket();
         }
     }
 
@@ -113,5 +117,9 @@ public class StelyMarketPlugin extends JavaPlugin {
 
     public EconomyManager getEconomyManager() {
         return economyManager;
+    }
+
+    public CacheManager getCacheManager() {
+        return cacheManager;
     }
 }

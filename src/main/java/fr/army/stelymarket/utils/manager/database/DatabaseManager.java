@@ -61,6 +61,8 @@ public abstract class DatabaseManager {
 
     public abstract MarketArea getMarketArea(Integer signId);
 
+    public abstract ArrayList<MarketArea> getMarketAreas();
+
     public abstract Integer getLastMarketId();
 
     public abstract void insertSign(int marketId, int x, int y, int z);

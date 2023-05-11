@@ -15,6 +15,7 @@ import fr.army.stelymarket.StelyMarketPlugin;
 import fr.army.stelymarket.commands.subCommands.SubCmdCreate;
 import fr.army.stelymarket.commands.subCommands.SubCmdExpired;
 import fr.army.stelymarket.commands.subCommands.SubCmdHelp;
+import fr.army.stelymarket.commands.subCommands.SubCmdRemove;
 
 public class CmdStelyMarket implements CommandExecutor, TabCompleter {
 
@@ -89,5 +90,6 @@ public class CmdStelyMarket implements CommandExecutor, TabCompleter {
         subCommands.put("help", new SubCmdHelp(plugin));
         subCommands.put("create", new SubCmdCreate(plugin));
         subCommands.put("expired", new SubCmdExpired(plugin));
+        subCommands.put("remove", new SubCmdRemove(plugin));
     }
 }

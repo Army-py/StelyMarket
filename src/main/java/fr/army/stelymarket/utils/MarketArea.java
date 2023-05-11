@@ -8,7 +8,12 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Sign;
 
+import com.sk89q.worldedit.EditSession;
+import com.sk89q.worldedit.MaxChangedBlocksException;
+import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
+import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldguard.WorldGuard;
 import com.sk89q.worldguard.protection.managers.RegionManager;
@@ -27,8 +32,6 @@ public class MarketArea {
     private final int marketId;
     private final Integer price;
     private final String regionId;
-
-    private ProtectedRegion region;
 
 
     public MarketArea(World world) {
@@ -68,13 +71,10 @@ public class MarketArea {
         return price;
     }
 
-    public ProtectedRegion getRegion() {
-        return region;
+    public String getRegionId() {
+        return regionId;
     }
 
-    public void setRegion(ProtectedRegion region) {
-        this.region = region;
-    }
 
     public void create(Region region){
         RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
@@ -99,20 +99,37 @@ public class MarketArea {
         RegionManager regions = container.get(new BukkitWorld(Bukkit.getServer().getWorld(world.getName())));
         regions.removeRegion(this.regionId);
         
-        databaseManager.removeSign(marketId);
+        MarketSign marketSign = databaseManager.getSign(marketId);
+        
+        marketSign.removeSign();
         databaseManager.removePlayer(marketId);
         databaseManager.removeMarket(this.marketId);
     }
 
-    public void expired(){
-        RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
-        RegionManager regions = container.get(new BukkitWorld(Bukkit.getServer().getWorld(world.getName())));
-        regions.removeRegion(this.regionId);
-        
+    public void expired(){        
         MarketSign marketSign = databaseManager.getSign(marketId);
         Sign sign = (Sign) Bukkit.getWorld(world.getName()).getBlockAt(marketSign.getLocation()).getState();
         marketSign.linkedSign(sign);
         databaseManager.removePlayer(marketId);
+    }
+
+    public void clearMarket(){
+        EditSession editSession = WorldEdit.getInstance().newEditSession(new BukkitWorld(world));
+        RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
+        RegionManager regions = container.get(new BukkitWorld(Bukkit.getServer().getWorld(world.getName())));
+        if (regions == null) return;
+
+        ProtectedRegion protectedRegion = regions.getRegion(regionId);
+        if (protectedRegion == null) return;
+
+        CuboidRegion region = new CuboidRegion(protectedRegion.getMinimumPoint(), protectedRegion.getMaximumPoint());
+        try {
+            editSession.setBlocks(region, BukkitAdapter.adapt(Material.AIR.createBlockData()));
+            editSession.commit();
+            editSession.close();
+        } catch (MaxChangedBlocksException e) {
+            e.printStackTrace();
+        }
     }
     
     public static MarketArea get(int marketId){
