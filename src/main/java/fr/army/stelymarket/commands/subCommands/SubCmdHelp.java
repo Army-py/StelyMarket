@@ -3,7 +3,6 @@ package fr.army.stelymarket.commands.subCommands;
 import java.util.List;
 
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import fr.army.stelymarket.StelyMarketPlugin;
@@ -12,17 +11,14 @@ import fr.army.stelymarket.utils.manager.MessageManager;
 
 
 public class SubCmdHelp extends SubCommand {
-    private YamlConfiguration messages;
 
     public SubCmdHelp(StelyMarketPlugin plugin){
         super(plugin);
-        // this.messages = plugin.getMessages();
     }
 
     @Override
     public boolean execute(CommandSender sender, String[] args) {
         Player player = (Player) sender;
-        // List<String> commands = messages.getStringList("commands.stelymarket_help.output");
 
         // player.sendMessage(String.join("\n", commands));
         player.sendMessage(MessageManager.COMMAND_HELP.getHelpMessage());

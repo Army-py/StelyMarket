@@ -139,8 +139,4 @@ public class MarketArea {
     private String IntegerToString(Integer value){
         return NumberFormat.getNumberInstance(Locale.US).format(value);
     }
-    
-    private Integer getIntFromText(String text){
-        return Integer.parseInt(text.replaceAll("[^0-9]", ""));
-    }
 }
