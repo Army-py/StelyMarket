@@ -65,8 +65,8 @@ public class SQLiteManager extends DatabaseManager {
     public void createTables(){
         if (isConnected()){
             try {
-                PreparedStatement queryCreatePlayer = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'player' ('playerId' INTEGER, 'playerName' TEXT, 'startDate' TEXT, 'endDate' TEXT, 'marketId' INTEGER, FOREIGN KEY('marketId') REFERENCES 'market'('marketId'), PRIMARY KEY('playerId' AUTOINCREMENT));");
-                PreparedStatement queryCreateMarket = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'market' ('marketId' INTEGER, 'price' INTEGER, 'world' TEXT, PRIMARY KEY('marketId' AUTOINCREMENT));");
+                PreparedStatement queryCreatePlayer = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'player' ('playerId' INTEGER, 'playerName' TEXT, 'startDate' INTEGER, 'endDate' INTEGER, 'marketId' INTEGER, FOREIGN KEY('marketId') REFERENCES 'market'('marketId'), PRIMARY KEY('playerId' AUTOINCREMENT));");
+                PreparedStatement queryCreateMarket = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'market' ('marketId' INTEGER, 'price' REAL, 'world' TEXT, PRIMARY KEY('marketId' AUTOINCREMENT));");
                 PreparedStatement queryCreateSign = connection.prepareStatement("CREATE TABLE IF NOT EXISTS 'sign' ('signId' INTEGER, 'x' INTEGER, 'y' INTEGER, 'z' INTEGER, 'marketId' INTEGER, FOREIGN KEY('marketId') REFERENCES 'market'('marketId'), PRIMARY KEY('signId' AUTOINCREMENT));");
 
                 queryCreatePlayer.executeUpdate();
@@ -84,12 +84,12 @@ public class SQLiteManager extends DatabaseManager {
 
 
     @Override
-    public void insertMarket(int marketId, int price, String worldName){
+    public void insertMarket(int marketId, double price, String worldName){
         if (isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("INSERT INTO market VALUES (?, ?, ?);");
                 query.setInt(1, marketId);
-                query.setInt(2, price);
+                query.setDouble(2, price);
                 query.setString(3, worldName);
                 query.executeUpdate();
                 query.close();
@@ -116,7 +116,7 @@ public class SQLiteManager extends DatabaseManager {
 
 
     @Override
-    public Integer getLastMarketId() {
+    public int getLastMarketId() {
         if (isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("SELECT marketId FROM market ORDER BY marketId DESC LIMIT 1;");
@@ -150,15 +150,15 @@ public class SQLiteManager extends DatabaseManager {
     }
 
     @Override
-    public int getMarketPrice(int marketId) {
+    public double getMarketPrice(int marketId) {
         if (isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("SELECT price FROM market WHERE marketId = ?;");
                 query.setInt(1, marketId);
                 ResultSet result = query.executeQuery();
-                int price = 0;
+                double price = 0;
                 if(result.next()){
-                    price = result.getInt("price");
+                    price = result.getDouble("price");
                 }
                 query.close();
                 return price;
@@ -472,5 +472,53 @@ public class SQLiteManager extends DatabaseManager {
             }
         }
         return null;
+    }
+
+    @Override
+    public ArrayList<Buyer> getAlertedPlayers() {
+        if (isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT p.playerName, p.startDate, p.endDate FROM market m INNER JOIN player p ON m.marketId = p.marketId WHERE p.endDate < ?;");
+                query.setDate(1, new Date(this.getAlertsDates().getTime().getTime()));
+                ResultSet result = query.executeQuery();
+                ArrayList<Buyer> buyers = new ArrayList<>();
+                while(result.next()){
+                    buyers.add(
+                        new Buyer(
+                            result.getString("playerName"),
+                            result.getDate("startDate"),
+                            result.getDate("endDate"),
+                            MarketArea.get(result.getInt("marketId"))
+                        )
+                    );
+                }
+                query.close();
+                return buyers;
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public boolean buyerMustBeAlerted(String playerName) {
+        if (isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT * FROM player WHERE playerName = ? AND endDate < ?;");
+                query.setString(1, playerName);
+                query.setDate(2, new Date(this.getAlertsDates().getTime().getTime()));
+                ResultSet result = query.executeQuery();
+                boolean mustBeAlerted = false;
+                if(result.next()){
+                    mustBeAlerted = true;
+                }
+                query.close();
+                return mustBeAlerted;
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return false;
     }
 }

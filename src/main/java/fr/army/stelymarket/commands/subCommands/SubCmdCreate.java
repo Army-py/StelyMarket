@@ -19,6 +19,7 @@ import com.sk89q.worldedit.world.World;
 import fr.army.stelymarket.StelyMarketPlugin;
 import fr.army.stelymarket.commands.SubCommand;
 import fr.army.stelymarket.utils.MarketArea;
+import fr.army.stelymarket.utils.manager.MessageManager;
 
 public class SubCmdCreate extends SubCommand {
 
@@ -38,13 +39,15 @@ public class SubCmdCreate extends SubCommand {
             if (selectionWorld == null) throw new IncompleteRegionException();
             region = localSession.getSelection(selectionWorld);
         } catch (IncompleteRegionException ex) {
-            actor.printError(TextComponent.of("Faites une sélection avant de créer un market."));
+            // actor.printError(TextComponent.of("Faites une sélection avant de créer un market."));
+            actor.printError(TextComponent.of(MessageManager.COMMAND_CREATE_NO_SELECTION.getMessage()));
             return true;
         }
 
         new MarketArea(Bukkit.getWorld(selectionWorld.getName())).create(region);
 
-        actor.print(TextComponent.of("Market créée !"));
+        // actor.print(TextComponent.of("Market créée !"));
+        actor.print(TextComponent.of(MessageManager.COMMAND_CREATE.getMessage()));
 
         return true;
     }

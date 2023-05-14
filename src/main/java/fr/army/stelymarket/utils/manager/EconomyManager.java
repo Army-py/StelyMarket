@@ -27,7 +27,8 @@ public class EconomyManager {
     public void removeMoneyPlayer(Player player, double money) {
         economy.withdrawPlayer(player, money);
         // player.sendRawMessage(messageManager.getReplaceMessage("payments.paid", DoubleToString(money)));
-        player.sendMessage("§aVous avez payé §6" + DoubleToString(money) + "§a$");
+        // player.sendMessage("§aVous avez payé §6" + DoubleToString(money) + "§a$");
+        player.sendMessage(MessageManager.PLAYER_PAID.setReplacement(DoubleToString(money)).getMessage());
     }
 
     public boolean setupEconomy(){

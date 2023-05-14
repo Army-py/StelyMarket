@@ -16,6 +16,7 @@ import fr.army.stelymarket.commands.subCommands.SubCmdCreate;
 import fr.army.stelymarket.commands.subCommands.SubCmdExpired;
 import fr.army.stelymarket.commands.subCommands.SubCmdHelp;
 import fr.army.stelymarket.commands.subCommands.SubCmdRemove;
+import fr.army.stelymarket.utils.manager.MessageManager;
 
 public class CmdStelyMarket implements CommandExecutor, TabCompleter {
 
@@ -51,7 +52,8 @@ public class CmdStelyMarket implements CommandExecutor, TabCompleter {
                     }
                 }
 
-                player.sendMessage("Commande invalide");
+                // player.sendMessage("Commande invalide");
+                player.sendMessage(MessageManager.INVALID_COMMAND.getMessage());
             }
         }
         return true;
@@ -89,7 +91,7 @@ public class CmdStelyMarket implements CommandExecutor, TabCompleter {
     private void initSubCommands(){
         subCommands.put("help", new SubCmdHelp(plugin));
         subCommands.put("create", new SubCmdCreate(plugin));
-        subCommands.put("expired", new SubCmdExpired(plugin));
+        // subCommands.put("expired", new SubCmdExpired(plugin));
         subCommands.put("remove", new SubCmdRemove(plugin));
     }
 }

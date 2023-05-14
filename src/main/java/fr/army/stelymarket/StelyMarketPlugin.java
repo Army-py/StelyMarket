@@ -15,6 +15,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import fr.army.stelymarket.commands.CommandManager;
 import fr.army.stelymarket.events.BreakEvent;
 import fr.army.stelymarket.events.InteractEvent;
+import fr.army.stelymarket.events.JoinEvent;
 import fr.army.stelymarket.events.SignEvent;
 import fr.army.stelymarket.utils.MarketArea;
 import fr.army.stelymarket.utils.manager.CacheManager;
@@ -56,6 +57,7 @@ public class StelyMarketPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new SignEvent(this), this);
         getServer().getPluginManager().registerEvents(new InteractEvent(), this);
         getServer().getPluginManager().registerEvents(new BreakEvent(), this);
+        getServer().getPluginManager().registerEvents(new JoinEvent(), this);
 
         getLogger().info("StelyMarketPlugin enabled");
 
@@ -71,6 +73,8 @@ public class StelyMarketPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        this.databaseManager.disconnect();
+
         getLogger().info("StelyMarketPlugin disabled");
     }
 
@@ -86,6 +90,16 @@ public class StelyMarketPlugin extends JavaPlugin {
         calendar.set(Calendar.HOUR_OF_DAY, 23);
         calendar.set(Calendar.MINUTE, 59);
         calendar.set(Calendar.SECOND, 59);
+        return calendar;
+    }
+
+
+    public Calendar getAlertsDates(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(
+            Calendar.DAY_OF_MONTH, 
+            calendar.getActualMaximum(Calendar.DAY_OF_MONTH) - getConfig().getInt("days_before_reset")
+        );
         return calendar;
     }
 
@@ -109,6 +123,10 @@ public class StelyMarketPlugin extends JavaPlugin {
 
     public YamlConfiguration getConfig() {
         return config;
+    }
+
+    public YamlConfiguration getMessages() {
+        return messages;
     }
 
     public DatabaseManager getDatabaseManager() {

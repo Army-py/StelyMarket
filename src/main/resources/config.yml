@@ -16,7 +16,16 @@ sqlite:
 region_prefix: "market_" # automatiquement suivi par un chiffre 
 
 # Prix par défaut d'un market
-default_price: 5000
+default_price: 5000.0
+
+# Nombre de jours avant le reset d'un market pendant lequel le joueur sera averti
+days_before_reset: 3
+
+# Format de du temps restant dans les messages
+time_left_format: "%d jours %h heures %m minutes %s secondes"
+
+# Temps avant d'envoyer un message de rappel au joueur (en secondes)
+reminder_time: 5
 
 # Préfixe à écrire sur la pancarte pour la relier à un market
 create_sign_prefix: "[stelymarket]"

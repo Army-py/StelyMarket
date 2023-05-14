@@ -47,13 +47,13 @@ public abstract class DatabaseManager {
 
     public abstract void createTables();
 
-    public abstract void insertMarket(int marketId, int price, String worldName);
+    public abstract void insertMarket(int marketId, double price, String worldName);
 
     public abstract void removeMarket(int marketId);
 
     public abstract void updateMarket(int marketId, int price);
 
-    public abstract int getMarketPrice(int marketId);
+    public abstract double getMarketPrice(int marketId);
 
     public abstract MarketArea getMarketArea(int marketId);
 
@@ -63,7 +63,7 @@ public abstract class DatabaseManager {
 
     public abstract ArrayList<MarketArea> getMarketAreas();
 
-    public abstract Integer getLastMarketId();
+    public abstract int getLastMarketId();
 
     public abstract void insertSign(int marketId, int x, int y, int z);
 
@@ -75,7 +75,7 @@ public abstract class DatabaseManager {
 
     public abstract Integer[] getSignCoords(int marketId);
 
-    public abstract ArrayList<Integer []> getSignCoords();
+    public abstract ArrayList<Integer[]> getSignCoords();
 
     public abstract void insertPlayer(String playerName, Calendar startDate, Calendar endDate, int marketId);
 
@@ -85,8 +85,21 @@ public abstract class DatabaseManager {
 
     public abstract ArrayList<MarketArea> getExpiredMarkets();
 
+    public abstract ArrayList<Buyer> getAlertedPlayers();
+
+    public abstract boolean buyerMustBeAlerted(String playerName);
+
 
     protected String getCurrentDate(){
         return new SimpleDateFormat("dd/MM/yyyy").format(Calendar.getInstance().getTime());
+    }
+
+    protected Calendar getAlertsDates(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(
+            Calendar.DAY_OF_MONTH, 
+            calendar.getActualMaximum(Calendar.DAY_OF_MONTH) - plugin.getConfig().getInt("days_before_reset")
+        );
+        return calendar;
     }
 }

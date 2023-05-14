@@ -30,7 +30,7 @@ public class MarketArea {
     
     private final World world;
     private final int marketId;
-    private final Integer price;
+    private final double price;
     private final String regionId;
 
 
@@ -67,7 +67,7 @@ public class MarketArea {
         return marketId;
     }
 
-    public int getPrice() {
+    public double getPrice() {
         return price;
     }
 

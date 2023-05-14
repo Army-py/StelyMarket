@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender;
 import fr.army.stelymarket.StelyMarketPlugin;
 import fr.army.stelymarket.commands.SubCommand;
 import fr.army.stelymarket.utils.MarketArea;
+import fr.army.stelymarket.utils.manager.MessageManager;
 import fr.army.stelymarket.utils.manager.database.DatabaseManager;
 
 public class SubCmdRemove extends SubCommand {
@@ -25,12 +26,15 @@ public class SubCmdRemove extends SubCommand {
             MarketArea marketArea = MarketArea.get(getIntInString(regionId));
             if (marketArea != null){
                 marketArea.remove();
-                sender.sendMessage("Market supprimé");
+                // sender.sendMessage("Market supprimé");
+                sender.sendMessage(MessageManager.COMMAND_REMOVE.getMessage());
             }else{
-                sender.sendMessage("Market introuvable");
+                // sender.sendMessage("Market introuvable");
+                sender.sendMessage(MessageManager.COMMAND_REMOVE_NO_MARKET.getMessage());
             }
         }else{
-            sender.sendMessage("Usage: /stelymarket remove <regionId>");
+            // sender.sendMessage("Usage: /stelymarket remove <regionId>");
+            sender.sendMessage(MessageManager.COMMAND_REMOVE_USAGE.getMessage());
         }
         return true;
     }
@@ -65,6 +69,10 @@ public class SubCmdRemove extends SubCommand {
                 result += string.charAt(i);
             }
         }
-        return Integer.parseInt(result);
+        if (result.length() == 0){
+            return -1;
+        }else{
+            return Integer.parseInt(result);
+        }
     }
 }

@@ -13,6 +13,7 @@ import fr.army.stelymarket.StelyMarketPlugin;
 import fr.army.stelymarket.utils.Buyer;
 import fr.army.stelymarket.utils.MarketArea;
 import fr.army.stelymarket.utils.MarketSign;
+import fr.army.stelymarket.utils.manager.MessageManager;
 
 public class InteractEvent implements Listener {
 
@@ -43,7 +44,8 @@ public class InteractEvent implements Listener {
             buyer.removeConfirmation();
         }else{
             buyer.addConfirmation();
-            player.sendMessage("§aCliquer à nouveau sur le panneau pour confirmer l'achat.");
+            // player.sendMessage("§aCliquer à nouveau sur le panneau pour confirmer l'achat.");
+            player.sendMessage(MessageManager.CONFIRM_BUY.getMessage());
         }
     }
 }

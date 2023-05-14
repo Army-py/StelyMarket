@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import fr.army.stelymarket.StelyMarketPlugin;
 import fr.army.stelymarket.commands.SubCommand;
+import fr.army.stelymarket.utils.manager.MessageManager;
 
 
 public class SubCmdHelp extends SubCommand {
@@ -21,9 +22,10 @@ public class SubCmdHelp extends SubCommand {
     @Override
     public boolean execute(CommandSender sender, String[] args) {
         Player player = (Player) sender;
-        List<String> commandsPlayer = messages.getStringList("commands.stelyteam_help.output");
+        // List<String> commands = messages.getStringList("commands.stelymarket_help.output");
 
-        player.sendMessage(String.join("\n", commandsPlayer));
+        // player.sendMessage(String.join("\n", commands));
+        player.sendMessage(MessageManager.COMMAND_HELP.getHelpMessage());
         
         return true;
     }
@@ -35,6 +37,6 @@ public class SubCmdHelp extends SubCommand {
 
     @Override
     public boolean isOpCommand() {
-        return false;
+        return true;
     }
 }

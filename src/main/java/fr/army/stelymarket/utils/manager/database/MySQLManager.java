@@ -73,7 +73,7 @@ public class MySQLManager extends DatabaseManager {
         if (isConnected()){
             try {
                 PreparedStatement queryCreatePlayer = connection.prepareStatement("CREATE TABLE IF NOT EXISTS player (playerId INTEGER AUTO_INCREMENT, playerName VARCHAR(255), startDate DATE, endDate DATE, marketId INTEGER, PRIMARY KEY (playerId));");
-                PreparedStatement queryCreateMarket = connection.prepareStatement("CREATE TABLE IF NOT EXISTS market (marketId INTEGER AUTO_INCREMENT, price INTEGER, 'world' VARCHAR(255), PRIMARY KEY(marketId));");
+                PreparedStatement queryCreateMarket = connection.prepareStatement("CREATE TABLE IF NOT EXISTS market (marketId INTEGER AUTO_INCREMENT, price FLOAT, world VARCHAR(255), PRIMARY KEY(marketId));");
                 PreparedStatement queryCreateSign = connection.prepareStatement("CREATE TABLE IF NOT EXISTS sign (signId INTEGER AUTO_INCREMENT, x INTEGER, y INTEGER, z INTEGER, marketId INTEGER, PRIMARY KEY(signId));");
 
                 queryCreatePlayer.executeUpdate();
@@ -101,12 +101,12 @@ public class MySQLManager extends DatabaseManager {
 
 
     @Override
-    public void insertMarket(int marketId, int price, String worldName){
+    public void insertMarket(int marketId, double price, String worldName){
         if (isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("INSERT INTO market VALUES (?, ?, ?);");
                 query.setInt(1, marketId);
-                query.setInt(2, price);
+                query.setDouble(2, price);
                 query.setString(3, worldName);
                 query.executeUpdate();
                 query.close();
@@ -133,7 +133,7 @@ public class MySQLManager extends DatabaseManager {
 
 
     @Override
-    public Integer getLastMarketId() {
+    public int getLastMarketId() {
         if (isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("SELECT marketId FROM market ORDER BY marketId DESC LIMIT 1;");
@@ -167,15 +167,15 @@ public class MySQLManager extends DatabaseManager {
     }
 
     @Override
-    public int getMarketPrice(int marketId) {
+    public double getMarketPrice(int marketId) {
         if (isConnected()){
             try {
                 PreparedStatement query = connection.prepareStatement("SELECT price FROM market WHERE marketId = ?;");
                 query.setInt(1, marketId);
                 ResultSet result = query.executeQuery();
-                int price = 0;
+                double price = 0;
                 if(result.next()){
-                    price = result.getInt("price");
+                    price = result.getDouble("price");
                 }
                 query.close();
                 return price;
@@ -489,5 +489,53 @@ public class MySQLManager extends DatabaseManager {
             }
         }
         return null;
+    }
+
+    @Override
+    public ArrayList<Buyer> getAlertedPlayers() {
+        if (isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT p.playerName, p.startDate, p.endDate FROM market m INNER JOIN player p ON m.marketId = p.marketId WHERE p.endDate < ?;");
+                query.setDate(1, new Date(this.getAlertsDates().getTime().getTime()));
+                ResultSet result = query.executeQuery();
+                ArrayList<Buyer> buyers = new ArrayList<>();
+                while(result.next()){
+                    buyers.add(
+                        new Buyer(
+                            result.getString("playerName"),
+                            result.getDate("startDate"),
+                            result.getDate("endDate"),
+                            MarketArea.get(result.getInt("marketId"))
+                        )
+                    );
+                }
+                query.close();
+                return buyers;
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public boolean buyerMustBeAlerted(String playerName) {
+        if (isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT * FROM player WHERE playerName = ? AND endDate < ?;");
+                query.setString(1, playerName);
+                query.setDate(2, new Date(this.getAlertsDates().getTime().getTime()));
+                ResultSet result = query.executeQuery();
+                boolean mustBeAlerted = false;
+                if(result.next()){
+                    mustBeAlerted = true;
+                }
+                query.close();
+                return mustBeAlerted;
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return false;
     }
 }
