@@ -13,9 +13,15 @@ import com.sk89q.worldedit.MaxChangedBlocksException;
 import com.sk89q.worldedit.WorldEdit;
 import com.sk89q.worldedit.bukkit.BukkitAdapter;
 import com.sk89q.worldedit.bukkit.BukkitWorld;
+import com.sk89q.worldedit.command.tool.BlockReplacer;
+import com.sk89q.worldedit.extent.clipboard.BlockArrayClipboard;
+import com.sk89q.worldedit.function.block.BlockReplace;
+import com.sk89q.worldedit.function.operation.ForwardExtentCopy;
+import com.sk89q.worldedit.function.operation.Operations;
 import com.sk89q.worldedit.regions.CuboidRegion;
 import com.sk89q.worldedit.regions.Region;
 import com.sk89q.worldguard.WorldGuard;
+import com.sk89q.worldguard.domains.DefaultDomain;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedCuboidRegion;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
@@ -79,19 +85,27 @@ public class MarketArea {
     public void create(Region region){
         RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
         RegionManager regions = container.get(region.getWorld());
+        ProtectedRegion protectedRegion = new ProtectedCuboidRegion(
+            this.regionId,
+            region.getMinimumPoint(),
+            region.getMaximumPoint()
+        );
+        protectedRegion.setPriority(StelyMarketPlugin.getPlugin().getConfig().getInt("region_priority"));
+
         regions.addRegion(
-            new ProtectedCuboidRegion(
-                this.regionId,
-                region.getMinimumPoint(),
-                region.getMaximumPoint()
-            )
+            protectedRegion
         );
 
-        // if (get(marketId) == null){
         databaseManager.insertMarket(this.marketId, this.price, region.getWorld().getName());
-        // }else{
-        //     databaseManager.insertMarket(databaseManager.getLastMarketId()+1, this.price);
-        // }
+    }
+
+    public void editRegionOwner(String playerName){
+        RegionContainer container = WorldGuard.getInstance().getPlatform().getRegionContainer();
+        RegionManager regions = container.get(new BukkitWorld(Bukkit.getServer().getWorld(world.getName())));
+        ProtectedRegion protectedRegion = regions.getRegion(regionId);
+        DefaultDomain owners = protectedRegion.getOwners();
+        owners.removeAll();
+        owners.addPlayer(playerName);
     }
 
     public void remove(){
@@ -123,8 +137,17 @@ public class MarketArea {
         if (protectedRegion == null) return;
 
         CuboidRegion region = new CuboidRegion(protectedRegion.getMinimumPoint(), protectedRegion.getMaximumPoint());
+        BlockArrayClipboard clipboard = new BlockArrayClipboard(region);
+
+        clipboard.setOrigin(region.getMinimumPoint());
+        ForwardExtentCopy copy = new ForwardExtentCopy(editSession, region, clipboard, region.getMaximumPoint());
+        copy.setSourceFunction(new BlockReplace(editSession, BukkitAdapter.adapt(Material.AIR.createBlockData())));
+        copy.setRemovingEntities(true);
         try {
-            editSession.setBlocks(region, BukkitAdapter.adapt(Material.AIR.createBlockData()));
+            DefaultDomain owners = protectedRegion.getOwners();
+            owners.removeAll();
+
+            Operations.completeLegacy(copy);
             editSession.commit();
             editSession.close();
         } catch (MaxChangedBlocksException e) {
@@ -134,6 +157,10 @@ public class MarketArea {
     
     public static MarketArea get(int marketId){
         return StelyMarketPlugin.getPlugin().getDatabaseManager().getMarketArea(marketId);
+    }
+
+    public static MarketArea get(String playerName){
+        return StelyMarketPlugin.getPlugin().getDatabaseManager().getMarketArea(playerName);
     }
     
     private String IntegerToString(Integer value){

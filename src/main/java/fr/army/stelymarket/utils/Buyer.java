@@ -53,6 +53,18 @@ public class Buyer {
         StelyMarketPlugin.getPlugin().getDatabaseManager().insertPlayer(name, startDate, endDate, market.getMarketId());
     }
 
+    public static Buyer get(String name) {
+        return StelyMarketPlugin.getPlugin().getDatabaseManager().getPlayer(name);
+    }
+
+    public static Buyer get(Player player) {
+        return StelyMarketPlugin.getPlugin().getDatabaseManager().getPlayer(player.getName());
+    }
+
+    public static Buyer get(int marketId) {
+        return StelyMarketPlugin.getPlugin().getDatabaseManager().getPlayer(marketId);
+    }
+
     public String getName() {
         return name;
     }

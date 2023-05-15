@@ -1,7 +1,9 @@
 package fr.army.stelymarket.utils;
 
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -38,7 +40,7 @@ public class MarketSign {
         for (int i = 0; i < newContent.size(); i++) {
             newContent.set(i, newContent.get(i)
                 .replaceAll("%prefix%", plugin.getConfig().getString("linked_sign_prefix"))
-                .replaceAll("%price%", String.valueOf(market.getPrice()))
+                .replaceAll("%price%", doubleToString(market.getPrice()))
                 .replaceAll("%end%", plugin.dateToString(plugin.getDateEndOfMonth(), "dd/MM")));
         }
         
@@ -53,7 +55,7 @@ public class MarketSign {
         for (int i = 0; i < newContent.size(); i++) {
             newContent.set(i, newContent.get(i)
                 .replaceAll("%prefix%", plugin.getConfig().getString("linked_sign_prefix"))
-                .replaceAll("%price%", String.valueOf(market.getPrice()))
+                .replaceAll("%price%", doubleToString(market.getPrice()))
                 .replaceAll("%end%", plugin.dateToString(plugin.getDateEndOfMonth(), "dd/MM")));
         }
         
@@ -69,7 +71,7 @@ public class MarketSign {
         for (int i = 0; i < newContent.size(); i++) {
             newContent.set(i, newContent.get(i)
                 .replaceAll("%prefix%", plugin.getConfig().getString("linked_sign_prefix"))
-                .replaceAll("%price%", String.valueOf(market.getPrice()))
+                .replaceAll("%price%", doubleToString(market.getPrice()))
                 .replaceAll("%end%", plugin.dateToString(plugin.getDateEndOfMonth(), "dd/MM"))
                 .replaceAll("%player%", playerName));
             if (newContent.get(i).length() > 15 + (getPrefixColors(newContent.get(i)).size()) * 2) newContent.set(i, newContent.get(i).substring(0, 15));
@@ -99,6 +101,11 @@ public class MarketSign {
             colors.add(hex);
         }
         return colors;
+    }
+
+    
+    private String doubleToString(double value){
+        return NumberFormat.getNumberInstance(Locale.US).format(value);
     }
 
 

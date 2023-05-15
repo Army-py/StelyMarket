@@ -31,9 +31,10 @@ public class InteractEvent implements Listener {
         MarketSign marketSign = MarketSign.get(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
         if (marketSign == null) return;
 
+        if (Buyer.get(marketSign.getMarket().getMarketId()) != null) return;
         
-        MarketArea marketArea = marketSign.getMarket();
         Player player = event.getPlayer();
+        MarketArea marketArea = marketSign.getMarket();
         
         Buyer buyer = new Buyer(player.getName(), player.getUniqueId());
         if (buyer.hasAMarket()) return;
@@ -41,6 +42,7 @@ public class InteractEvent implements Listener {
         if (buyer.inConfirmation()){
             buyer.buyMarket(marketArea);
             marketSign.rentedSign(clickedSign, player.getName());
+            marketArea.editRegionOwner(player.getName());
             buyer.removeConfirmation();
         }else{
             buyer.addConfirmation();

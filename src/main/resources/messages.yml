@@ -1,21 +1,21 @@
 prefix: "§7[§5StelyMarket§7] "
 
 invalid_command: "§cCommande invalide."
-confirm_buy: "§aCliquer à nouveau sur le panneau pour confirmer l'achat."
-market_deleted_in: "§cVotre market se supprimera dans %time%."
-player_paid: "§aVous avez payé §6%price%€."
+confirm_buy: "§aClique à nouveau sur le panneau pour confirmer l'achat."
+market_deleted_in: "§4§l§kll§r §c§lVotre shop au spawn de la ville se supprimera dans %time%. §4§l§kll§r"
+player_paid: "§aVous avez payé §6%price%€§a."
 
 commands:
   help:
     output:
       - "§7-------- §5Commandes StelyMarket §7--------"
-      - "§a/sm create : §7Créer un market avec la sélection qui a été faite"
-      - "§a/sm remove <market> : §7Supprimer un market"
+      - "§a/sm create : §e§oCréer un market avec la sélection qui a été faite"
+      - "§a/sm remove <market> : §e§oSupprimer un market"
       - "§7------------------------------------"
   create:
     no_selection: "§cFaites une sélection avant de créer un market."
-    output: "§aMarket créée !"
+    output: "§aMarket créée."
   remove:
     usage: "§7/stelymarket remove <market>"
     no_market: "§cCe market n'existe pas."
-    output: "§aMarket supprimé !"
+    output: "§aMarket supprimé."

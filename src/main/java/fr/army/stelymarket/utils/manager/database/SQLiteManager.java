@@ -521,4 +521,29 @@ public class SQLiteManager extends DatabaseManager {
         }
         return false;
     }
+
+    @Override
+    public Buyer getPlayer(int marketId) {
+        if (isConnected()){
+            try {
+                PreparedStatement query = connection.prepareStatement("SELECT * FROM player WHERE marketId = ?;");
+                query.setInt(1, marketId);
+                ResultSet result = query.executeQuery();
+                Buyer buyer = null;
+                if(result.next()){
+                    buyer = new Buyer(
+                        result.getString("playerName"),
+                        result.getDate("startDate"),
+                        result.getDate("endDate"),
+                        MarketArea.get(result.getInt("marketId"))
+                    );
+                }
+                query.close();
+                return buyer;
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
 }

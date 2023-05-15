@@ -83,6 +83,8 @@ public abstract class DatabaseManager {
 
     public abstract Buyer getPlayer(String playerName);
 
+    public abstract Buyer getPlayer(int marketId);
+
     public abstract ArrayList<MarketArea> getExpiredMarkets();
 
     public abstract ArrayList<Buyer> getAlertedPlayers();

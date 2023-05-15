@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Objects;
 
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -68,6 +69,11 @@ public class StelyMarketPlugin extends JavaPlugin {
             market.expired();
             market.clearMarket();
         }
+        // Plugman reload shop plugin
+        ConsoleCommandSender console = getServer().getConsoleSender();
+        getServer().getScheduler().runTaskLater(this, () -> {
+            getServer().dispatchCommand(console, "shopchest:shop reload");
+        }, 20L);
     }
 
 
