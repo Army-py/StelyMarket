@@ -74,3 +74,10 @@ allowed_signs:
   - "WARPED_SIGN"
   - "MANGROVE_WALL_SIGN"
   - "MANGROVE_SIGN"
+
+
+first_day_task:
+  # Si true, le message sera envoyé à tous les joueurs connectés
+  toggle: true
+  # Temps avant d'envoyer le message (en secondes)
+  interval: 3600

@@ -19,3 +19,8 @@ commands:
     usage: "§7/stelymarket remove <market>"
     no_market: "§cCe market n'existe pas."
     output: "§aMarket supprimé."
+
+
+tasks:
+  first_day_task:
+    output: "§aLes markets sont disponibles au spawn !"

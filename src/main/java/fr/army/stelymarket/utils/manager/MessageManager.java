@@ -16,6 +16,7 @@ public enum MessageManager {
     COMMAND_REMOVE("commands.remove.output"),
     COMMAND_REMOVE_USAGE("commands.remove.usage"),
     COMMAND_REMOVE_NO_MARKET("commands.remove.no_market"),
+    TASK_FIRST_DAY("tasks.first_day_task.output"),
     ;
 
 

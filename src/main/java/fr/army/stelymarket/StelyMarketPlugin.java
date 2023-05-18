@@ -21,6 +21,7 @@ import fr.army.stelymarket.events.SignEvent;
 import fr.army.stelymarket.utils.MarketArea;
 import fr.army.stelymarket.utils.manager.CacheManager;
 import fr.army.stelymarket.utils.manager.EconomyManager;
+import fr.army.stelymarket.utils.manager.TasksManager;
 import fr.army.stelymarket.utils.manager.database.DatabaseManager;
 
 public class StelyMarketPlugin extends JavaPlugin {
@@ -32,6 +33,7 @@ public class StelyMarketPlugin extends JavaPlugin {
     private CommandManager commandManager;
     private EconomyManager economyManager;
     private CacheManager cacheManager;
+    private TasksManager tasksManager;
 
 
     @Override
@@ -54,6 +56,7 @@ public class StelyMarketPlugin extends JavaPlugin {
         this.commandManager = new CommandManager(this);
         this.economyManager = new EconomyManager(this);
         this.cacheManager = new CacheManager();
+        this.tasksManager = new TasksManager();
 
         getServer().getPluginManager().registerEvents(new SignEvent(this), this);
         getServer().getPluginManager().registerEvents(new InteractEvent(), this);
@@ -74,6 +77,11 @@ public class StelyMarketPlugin extends JavaPlugin {
         getServer().getScheduler().runTaskLater(this, () -> {
             getServer().dispatchCommand(console, "shopchest:shop reload");
         }, 20L);
+
+        // First day task
+        if (Calendar.getInstance().get(Calendar.DAY_OF_MONTH) == 18) {
+            tasksManager.firstDayTask();
+        }
     }
 
 
@@ -145,5 +153,9 @@ public class StelyMarketPlugin extends JavaPlugin {
 
     public CacheManager getCacheManager() {
         return cacheManager;
+    }
+
+    public TasksManager getTasksManager() {
+        return tasksManager;
     }
 }
