@@ -79,7 +79,7 @@ public class StelyMarketPlugin extends JavaPlugin {
         }, 20L);
 
         // First day task
-        if (Calendar.getInstance().get(Calendar.DAY_OF_MONTH) == 18) {
+        if (Calendar.getInstance().get(Calendar.DAY_OF_MONTH) == 1) {
             tasksManager.firstDayTask();
         }
     }
