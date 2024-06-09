@@ -11,6 +11,7 @@ commands:
       - "§7-------- §5Commandes StelyMarket §7--------"
       - "§a/sm create : §e§oCréer un market avec la sélection qui a été faite"
       - "§a/sm remove <market> : §e§oSupprimer un market"
+      - "§a/sm regen <market> : §e§oRéinitialiser un market"
       - "§7------------------------------------"
   create:
     no_selection: "§cFaites une sélection avant de créer un market."
@@ -19,6 +20,10 @@ commands:
     usage: "§7/stelymarket remove <market>"
     no_market: "§cCe market n'existe pas."
     output: "§aMarket supprimé."
+  regen:
+    usage: "§7/stelymarket regen <market>"
+    no_market: "§cCe market n'existe pas."
+    output: "§aMarket regénéré."
 
 
 tasks:
