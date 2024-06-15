@@ -19,21 +19,11 @@ commands:
         default: "op"
     delete:
       description: "Supprime une zone de vente"
-      usage: "/stelymarket delete <zone_id>"
+      usage: "/stelymarket remove <zone_id>"
       permissions:
         default: "op"
     regen:
       description: "Regénère une zone de vente"
       usage: "/stelymarket regen <zone_id>"
-      permissions:
-        default: "op"
-    editprice:
-      description: "Change le prix d'une zone de vente"
-      usage: "/stelymarket editprice <zone_id> <price>"
-      permissions:
-        default: "op"
-    editarea:
-      description: "Change la zone d'une zone de vente"
-      usage: "/stelymarket editarea <zone_id>"
       permissions:
         default: "op"

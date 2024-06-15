@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import fr.army.stelymarket.commands.subCommands.SubCmdRegen;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -92,5 +93,6 @@ public class CmdStelyMarket implements CommandExecutor, TabCompleter {
         subCommands.put("create", new SubCmdCreate(plugin));
         // subCommands.put("expired", new SubCmdExpired(plugin));
         subCommands.put("remove", new SubCmdRemove(plugin));
+        subCommands.put("regen", new SubCmdRegen(plugin));
     }
 }
