@@ -23,7 +23,9 @@ public class InteractEvent implements Listener {
     public void onClick(PlayerInteractEvent event) {
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         if (!config.getStringList("allowed_signs").contains(event.getClickedBlock().getType().name())) return;
-        
+
+        event.setCancelled(true);
+
         Sign clickedSign = (Sign) event.getClickedBlock().getState();
         if (!config.getString("linked_sign_prefix").equals(clickedSign.getLines()[0])) return;
         

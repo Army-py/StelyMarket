@@ -10,6 +10,8 @@ import java.util.regex.Pattern;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 import org.bukkit.event.block.SignChangeEvent;
 
@@ -85,8 +87,14 @@ public class MarketSign {
 
 
     public void removeSign(){
-        Sign sign = (Sign) Bukkit.getWorld(market.getWorld().getName()).getBlockAt(x, y, z).getState();
-        if (sign.isPlaced()) sign.getBlock().setBlockData(Material.AIR.createBlockData());
+        final World world = Bukkit.getWorld(market.getWorld().getName());
+        if (world == null) return;
+
+        final BlockState blockState = world.getBlockAt(x, y, z).getState();
+
+        if (blockState instanceof Sign sign && sign.isPlaced()) {
+            sign.getBlock().setBlockData(Material.AIR.createBlockData());
+        }
 
         plugin.getDatabaseManager().removeSign(market.getMarketId());
     }

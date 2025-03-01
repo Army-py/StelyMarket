@@ -25,8 +25,6 @@ public class SignEvent implements Listener {
         if (!event.getLine(0).equalsIgnoreCase(config.getString("create_sign_prefix"))
                 && !isInt(event.getLine(1))) return;
 
-        System.out.println("SignEvent");
-
         Sign sign = (Sign) event.getBlock().getState();
 
         int marketId = getIntFromText(event.getLine(1));
